@@ -1,0 +1,62 @@
+package shmarovfedor.areaplanning.graphics.use;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
+import shmarovfedor.areaplanning.graphics.MainFrame;
+import shmarovfedor.areaplanning.model.BuildingManager;
+import shmarovfedor.areaplanning.model.RegionManager;
+import shmarovfedor.areaplanning.util.Building;
+import shmarovfedor.areaplanning.util.Point;
+
+public class MainFrameUse {
+
+	public static void main(String[] args) {
+		/*
+		List<Point> list = new ArrayList<Point>();
+		list.add(new Point(103.95, 190.8));
+		list.add(new Point(47.25,	185.4));
+		list.add(new Point(4.05,	139.95));
+		list.add(new Point(0,	67));
+		list.add(new Point(21.6,	36.45));
+		list.add(new Point(54.45,	8.1));
+		list.add(new Point(62.55,	3.6));
+		list.add(new Point(71.55,	0));
+		list.add(new Point(84.15,	9.9));
+		list.add(new Point(127.8,	79.65));
+		list.add(new Point(146.7,	112));
+		list.add(new Point(136.35,	166));
+		
+		for (int i = 0; i < list.size(); i++) RegionManager.addPoint(list.get(i));
+		RegionManager.createPolygon();
+		
+		list = new ArrayList<Point>();
+		list.add(new Point(84.15,	9.9));
+		list.add(new Point(127.8,	79.65));
+		list.add(new Point(98.55,	79.65));
+		list.add(new Point(80.1,	61.2));
+		
+		for (int i = 0; i < list.size(); i++) RegionManager.addPoint(list.get(i));
+		RegionManager.addExclusivePolygon();
+		
+		list = new ArrayList<Point>();
+		list.add(new Point(76.7,	155));
+		list.add(new Point(56,	145));
+		list.add(new Point(49,	128));
+		list.add(new Point(60,	120));
+		list.add(new Point(79,	128));
+		list.add(new Point(87,	147));
+		
+		for (int i = 0; i < list.size(); i++) RegionManager.addPoint(list.get(i));
+		RegionManager.addExclusivePolygon();
+		
+		BuildingManager.add(new Building(20, 20, 5, Color.GREEN, "4 flat"));
+		BuildingManager.add(new Building(50, 30, 30, Color.YELLOW, "20 flat"));
+		*/
+		MainFrame mainFrame = new MainFrame();
+		mainFrame.setVisible(true);
+
+	}
+
+}
