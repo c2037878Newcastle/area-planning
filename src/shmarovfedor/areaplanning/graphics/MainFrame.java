@@ -17,7 +17,7 @@ import shmarovfedor.areaplanning.model.BuildingManager;
 import shmarovfedor.areaplanning.model.RegionManager;
 import shmarovfedor.areaplanning.model.SolutionManager;
 import shmarovfedor.areaplanning.util.Building;
-import shmarovfedor.areaplanning.solver.OptimizationManager;
+import shmarovfedor.areaplanning.solver.Optimizer;
 import shmarovfedor.areaplanning.util.Polygon;
 
 public class MainFrame extends JFrame{
@@ -78,7 +78,7 @@ public class MainFrame extends JFrame{
 				
 				for (int i = 0; i < buildings.length; i++) buildings[i] = building.get(i);
 
-				OptimizationManager.create(polygon, buildings);
+				Optimizer.create(polygon, buildings);
 				(new BackgroundWorker()).execute();
 			}
 			
@@ -88,8 +88,8 @@ public class MainFrame extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				OptimizationManager.terminate();
-				OptimizationManager.setCorrectTermination(false);
+				Optimizer.terminate();
+				Optimizer.setCorrectTermination(false);
 			}
 			
 		});
@@ -98,7 +98,7 @@ public class MainFrame extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				OptimizationManager.terminateExecution();
+				Optimizer.terminateExecution();
 			}
 			
 		});
@@ -153,7 +153,7 @@ public class MainFrame extends JFrame{
 	
 	public void setButtons() {
 		
-		switch(OptimizationManager.getStatus()) {
+		switch(Optimizer.getStatus()) {
 		
 			case 0:
 				startButton.setEnabled(true);

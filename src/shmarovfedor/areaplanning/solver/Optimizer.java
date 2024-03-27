@@ -20,7 +20,7 @@ import shmarovfedor.areaplanning.util.Polygon;
 /**
  * The Class OptimizationManager.
  */
-public class OptimizationManager{
+public class Optimizer {
 	
 	//environment variables
 	/** The time limit. */
@@ -67,8 +67,8 @@ public class OptimizationManager{
 	 * @param building the building
 	 */
 	public static void create(Polygon polygon, Building[] building) {
-	   	OptimizationManager.polygon = polygon;
-		OptimizationManager.building = building;
+	   	Optimizer.polygon = polygon;
+		Optimizer.building = building;
 		setExecutionTermination(false);
 	}
 	
@@ -430,7 +430,7 @@ public class OptimizationManager{
 	 * @return the objective bound
 	 */
 	public static double getObjectiveBound() {
-		return OptimizationManager.objectiveBound;
+		return Optimizer.objectiveBound;
 	}
 
 	/**
@@ -448,7 +448,7 @@ public class OptimizationManager{
 	 * @param correctTermination the new correct termination
 	 */
 	public static void setCorrectTermination(boolean correctTermination) {
-		OptimizationManager.correctTermination = correctTermination;
+		Optimizer.correctTermination = correctTermination;
 	}
 		
 	/**
@@ -466,7 +466,7 @@ public class OptimizationManager{
 	 * @param timeLimit the new time limit
 	 */
 	public static void setTimeLimit(double timeLimit) {
-		OptimizationManager.timeLimit = timeLimit;
+		Optimizer.timeLimit = timeLimit;
 	}
 
 	/**
@@ -484,7 +484,7 @@ public class OptimizationManager{
 	 * @param executionTermination the new execution termination
 	 */
 	public static void setExecutionTermination(boolean executionTermination) {
-		OptimizationManager.executionTermination = executionTermination;
+		Optimizer.executionTermination = executionTermination;
 	}
 
 	public static int getStatus() {
@@ -492,7 +492,7 @@ public class OptimizationManager{
 	}
 
 	public static void setStatus(int status) {
-		OptimizationManager.status = status;
+		Optimizer.status = status;
 	}
 
 

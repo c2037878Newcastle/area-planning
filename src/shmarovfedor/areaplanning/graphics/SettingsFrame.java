@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 
 import shmarovfedor.areaplanning.background.BackgroundWorker;
 import shmarovfedor.areaplanning.model.SolutionManager;
-import shmarovfedor.areaplanning.solver.OptimizationManager;
+import shmarovfedor.areaplanning.solver.Optimizer;
 
 public class SettingsFrame extends JFrame{
 
@@ -27,7 +27,7 @@ public class SettingsFrame extends JFrame{
 		JLabel boundLabel = new JLabel("Bound:");
 				
 		final JTextField timeLimitTextField = new JTextField();
-		timeLimitTextField.setText(String.valueOf(OptimizationManager.getTimeLimit()));
+		timeLimitTextField.setText(String.valueOf(Optimizer.getTimeLimit()));
 		final JTextField boundTextField = new JTextField();
 		boundTextField.setText(String.valueOf(SolutionManager.getLowerBound()));
 		
@@ -66,7 +66,7 @@ public class SettingsFrame extends JFrame{
 					//SolutionManager.setCurrentBound(bound);
 					SolutionManager.setLowerBound(bound);		
 					if (timeLimit > 0) {
-						OptimizationManager.setTimeLimit(timeLimit);
+						Optimizer.setTimeLimit(timeLimit);
 						dispose();
 					} else {
 						JOptionPane.showMessageDialog(new JFrame(), "Time limit must be positive");

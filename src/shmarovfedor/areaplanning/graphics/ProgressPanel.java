@@ -7,7 +7,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import shmarovfedor.areaplanning.model.SolutionManager;
-import shmarovfedor.areaplanning.solver.OptimizationManager;
+import shmarovfedor.areaplanning.solver.Optimizer;
 
 public class ProgressPanel extends JPanel{
 	
@@ -79,7 +79,7 @@ public class ProgressPanel extends JPanel{
 		
 		String status = null;
 		
-		switch(OptimizationManager.getStatus()) {
+		switch(Optimizer.getStatus()) {
 		
 			case 0:
 				status = "Waiting";

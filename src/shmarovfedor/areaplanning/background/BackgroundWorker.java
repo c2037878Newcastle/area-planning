@@ -4,7 +4,7 @@ import javax.swing.SwingWorker;
 
 import shmarovfedor.areaplanning.model.BuildingManager;
 import shmarovfedor.areaplanning.model.SolutionManager;
-import shmarovfedor.areaplanning.solver.OptimizationManager;
+import shmarovfedor.areaplanning.solver.Optimizer;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -27,12 +27,12 @@ public class BackgroundWorker  extends SwingWorker<String, Object>{
 	 */
 	@Override
 	protected String doInBackground() throws Exception {
-		OptimizationManager.setModel();
+		Optimizer.setModel();
 		if (binarySearch) {
-			OptimizationManager.optimize();
+			Optimizer.optimize();
 			double lowerBound = SolutionManager.getLowerBound();
 			double upperBound = SolutionManager.getObjectiveUpperBound();
-			OptimizationManager.dispose();
+			Optimizer.dispose();
 			while((upperBound - lowerBound) >= BuildingManager.getPrecision())
 			{
 				double bound = (upperBound + lowerBound) / 2;
@@ -40,27 +40,27 @@ public class BackgroundWorker  extends SwingWorker<String, Object>{
 				SolutionManager.setUpperBound(upperBound);
 				SolutionManager.setCurrentBound(bound);
 				
-				OptimizationManager.setModel();
-				OptimizationManager.setLowerBound(bound);
-				OptimizationManager.optimize();
-				if (OptimizationManager.isCorrectTermination()) lowerBound = bound; else upperBound = bound;
-				if (OptimizationManager.isExecutionTermination()) {
-					OptimizationManager.terminateExecution();
-					OptimizationManager.dispose();
+				Optimizer.setModel();
+				Optimizer.setLowerBound(bound);
+				Optimizer.optimize();
+				if (Optimizer.isCorrectTermination()) lowerBound = bound; else upperBound = bound;
+				if (Optimizer.isExecutionTermination()) {
+					Optimizer.terminateExecution();
+					Optimizer.dispose();
 					break;
 				}
 			}
 		} else {
-			OptimizationManager.removeLowerBound();
-			OptimizationManager.setLowerBound(SolutionManager.getLowerBound());
-			OptimizationManager.optimize();
-			if (!OptimizationManager.isExecutionTermination()) OptimizationManager.terminateExecution();
-			OptimizationManager.dispose();
+			Optimizer.removeLowerBound();
+			Optimizer.setLowerBound(SolutionManager.getLowerBound());
+			Optimizer.optimize();
+			if (!Optimizer.isExecutionTermination()) Optimizer.terminateExecution();
+			Optimizer.dispose();
 		}
 		
-		if (!OptimizationManager.isExecutionTermination()) {
-			OptimizationManager.terminateExecution();
-			OptimizationManager.dispose();
+		if (!Optimizer.isExecutionTermination()) {
+			Optimizer.terminateExecution();
+			Optimizer.dispose();
 		}
 
 		return null;

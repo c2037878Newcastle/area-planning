@@ -64,7 +64,7 @@ public class Callback extends GRBCallback{
 					SolutionManager.add(solution);
 					SolutionManager.setObjective(objective);
 					SolutionManager.setObjectiveUpperBound(objBound);
-					if (BackgroundWorker.isBinarySearch()) OptimizationManager.terminate();
+					if (BackgroundWorker.isBinarySearch()) Optimizer.terminate();
 				}
 			}	
 		} catch (GRBException e) {
