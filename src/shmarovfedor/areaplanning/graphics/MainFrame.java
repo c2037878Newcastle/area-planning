@@ -31,12 +31,10 @@ public class MainFrame extends JFrame{
 	private JButton settingsButton;
 	private JButton skipButton;
 	private final Timer timer = new Timer(20, new ActionListener() {
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			setButtons();			
 		}
-		
 	});
 	
 	public MainFrame() {
@@ -49,10 +47,8 @@ public class MainFrame extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		mainPanel = new MainPanel();
-		rightPanel = new RightPanel(200, 500);
-		
+		rightPanel = new RightPanel(300, 500);
 		buttonPanel = new JPanel();
-		
 		startButton = new JButton("Start");
 		skipButton = new JButton("Skip");
 		skipButton.setEnabled(false);
@@ -64,63 +60,47 @@ public class MainFrame extends JFrame{
 		timer.start();
 		
 		startButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				SolutionManager.clear();
-
 				Polygon polygon = RegionManager.getPolygon();
-				
 				List<Building> building = BuildingManager.getAll();
-				
 				Building[] buildings = new Building[building.size()];
-				
-				for (int i = 0; i < buildings.length; i++) buildings[i] = building.get(i);
-
+				for (int i = 0; i < buildings.length; i++)
+					buildings[i] = building.get(i);
 				Optimizer.create(polygon, buildings);
 				(new BackgroundWorker()).execute();
 			}
-			
 		});
 		
 		skipButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Optimizer.terminate();
 				Optimizer.setCorrectTermination(false);
 			}
-			
 		});
 		
 		terminateButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Optimizer.terminateExecution();
 			}
-			
 		});
 		
 		saveButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mainPanel.saveToFile(String.valueOf(System.currentTimeMillis()));
 			}
-
 		});
 		
 		settingsButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SettingsFrame settingsFrame = new SettingsFrame(200, 200);
 				settingsFrame.setVisible(true);
-				
 			}
-			
 		});
 		
 		buttonPanel.add(startButton);
@@ -148,13 +128,10 @@ public class MainFrame extends JFrame{
 		getContentPane().add(buttonPanel, constraints);
 
 		pack();
-
 	}
 	
 	public void setButtons() {
-		
 		switch(Optimizer.getStatus()) {
-		
 			case 0:
 				startButton.setEnabled(true);
 				skipButton.setEnabled(false);
@@ -162,7 +139,6 @@ public class MainFrame extends JFrame{
 				settingsButton.setEnabled(true);
 				rightPanel.getAddButton().setEnabled(true);
 				break;
-				
 			case 1:
 				startButton.setEnabled(false);
 				skipButton.setEnabled(false);
@@ -170,15 +146,13 @@ public class MainFrame extends JFrame{
 				settingsButton.setEnabled(false);
 				rightPanel.getAddButton().setEnabled(false);
 				break;
-				
 			case 2:
 				startButton.setEnabled(false);
-				if (!BackgroundWorker.isBinarySearch()) skipButton.setEnabled(false); else skipButton.setEnabled(true);
+                skipButton.setEnabled(BackgroundWorker.isBinarySearch());
 				terminateButton.setEnabled(true);
 				settingsButton.setEnabled(false);
 				rightPanel.getAddButton().setEnabled(false);
 				break;
-				
 			case 3:
 				startButton.setEnabled(true);
 				skipButton.setEnabled(false);
@@ -186,10 +160,6 @@ public class MainFrame extends JFrame{
 				settingsButton.setEnabled(true);
 				rightPanel.getAddButton().setEnabled(true);
 				break;
-				
 		}
-		
 	}
-	
-	
 }

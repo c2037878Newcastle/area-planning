@@ -17,7 +17,6 @@ import shmarovfedor.areaplanning.model.BuildingManager;
 import shmarovfedor.areaplanning.util.Building;
 
 public class AddBuildingFrame extends JFrame{
-	
 	private Color color = Color.WHITE;
 	
 	public AddBuildingFrame(int width, int height) {
@@ -26,9 +25,9 @@ public class AddBuildingFrame extends JFrame{
 		setResizable(false);
 		
 		JLabel nameLabel = new JLabel("Name:");
-		JLabel widthLabel = new JLabel("Width:");
-		JLabel heightLabel = new JLabel("Length:");
-		JLabel benefitLabel = new JLabel("Benefit:");
+		JLabel widthLabel = new JLabel("Width (m):");
+		JLabel heightLabel = new JLabel("Length (m):");
+		JLabel benefitLabel = new JLabel("Benefit (£):");
 		JLabel colorLabel = new JLabel("Color:");
 		
 		final JTextField nameTextField = new JTextField();
@@ -38,12 +37,10 @@ public class AddBuildingFrame extends JFrame{
 		JButton chooseButton = new JButton("Choose");
 		
 		chooseButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {				
 				color = JColorChooser.showDialog(new JFrame(), "Choose color", Color.WHITE);
 			}
-			
 		});
 		
 		JButton confirmButton = new JButton("Confirm");
@@ -63,10 +60,8 @@ public class AddBuildingFrame extends JFrame{
 		getContentPane().add(confirmButton);
 		
 		confirmButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				try {
 					double width = Double.parseDouble(widthTextField.getText());
 					double height = Double.parseDouble(heightTextField.getText());
@@ -86,11 +81,7 @@ public class AddBuildingFrame extends JFrame{
 				} catch(NumberFormatException exception) {
 					JOptionPane.showMessageDialog(new JFrame(), "Wrong number format " + exception.getLocalizedMessage());
 				}
-
 			}
-			
 		});
-		
 	}
-
 }

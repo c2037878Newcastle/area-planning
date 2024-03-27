@@ -61,9 +61,9 @@ public class BuildingPanel extends JPanel{
 		int position = 40;
 		for (int i = 0; i < building.size(); i++) {
 			g.setColor(Color.BLACK);
-			g.drawString(building.get(i).getName() + 
-							building.get(i).getWidth() + "x" + 
-							building.get(i).getHeight() + "x" + 
+			g.drawString(building.get(i).getName() + ": " +
+							building.get(i).getWidth() + "m x " +
+							building.get(i).getHeight() + "m x £" +
 							building.get(i).getBenefit(), 20, position);
 
 			g.setColor(building.get(i).getColor());
