@@ -2,24 +2,15 @@ package shmarovfedor.areaplanning.graphics;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import shmarovfedor.areaplanning.model.RegionManager;
-import shmarovfedor.areaplanning.util.OptimizationManager;
 
 public class MainPanel extends JPanel{
 

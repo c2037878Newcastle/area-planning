@@ -1,6 +1,5 @@
 package shmarovfedor.areaplanning.graphics;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -8,17 +7,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import shmarovfedor.areaplanning.background.BackgroundWorker;
-import shmarovfedor.areaplanning.model.BuildingManager;
 import shmarovfedor.areaplanning.model.SolutionManager;
-import shmarovfedor.areaplanning.util.Building;
-import shmarovfedor.areaplanning.util.OptimizationManager;
+import shmarovfedor.areaplanning.solver.OptimizationManager;
 
 public class SettingsFrame extends JFrame{
 

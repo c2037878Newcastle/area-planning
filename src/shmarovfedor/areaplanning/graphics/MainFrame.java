@@ -1,6 +1,5 @@
 package shmarovfedor.areaplanning.graphics;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,8 +17,7 @@ import shmarovfedor.areaplanning.model.BuildingManager;
 import shmarovfedor.areaplanning.model.RegionManager;
 import shmarovfedor.areaplanning.model.SolutionManager;
 import shmarovfedor.areaplanning.util.Building;
-import shmarovfedor.areaplanning.util.OptimizationManager;
-import shmarovfedor.areaplanning.util.Point;
+import shmarovfedor.areaplanning.solver.OptimizationManager;
 import shmarovfedor.areaplanning.util.Polygon;
 
 public class MainFrame extends JFrame{

@@ -1,17 +1,12 @@
 package shmarovfedor.areaplanning.graphics;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import shmarovfedor.areaplanning.background.BackgroundWorker;
-import shmarovfedor.areaplanning.util.OptimizationManager;
 
 public class RightPanel extends JPanel{
 

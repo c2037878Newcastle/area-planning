@@ -4,7 +4,7 @@ import javax.swing.SwingWorker;
 
 import shmarovfedor.areaplanning.model.BuildingManager;
 import shmarovfedor.areaplanning.model.SolutionManager;
-import shmarovfedor.areaplanning.util.OptimizationManager;
+import shmarovfedor.areaplanning.solver.OptimizationManager;
 
 // TODO: Auto-generated Javadoc
 /**

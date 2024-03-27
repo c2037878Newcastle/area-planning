@@ -6,9 +6,8 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import shmarovfedor.areaplanning.background.BackgroundWorker;
 import shmarovfedor.areaplanning.model.SolutionManager;
-import shmarovfedor.areaplanning.util.OptimizationManager;
+import shmarovfedor.areaplanning.solver.OptimizationManager;
 
 public class ProgressPanel extends JPanel{
 	
