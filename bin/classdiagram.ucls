@@ -83,7 +83,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="shmarovfedor.areaplanning.graphics.use.MainFrameUse" project="AreaPlanning" 
+  <class id="10" language="java" name="shmarovfedor.areaplanning.graphics.use.RunGUI" project="AreaPlanning"
     file="/AreaPlanning/src/shmarovfedor/areaplanning/graphics/use/MainFrameUse.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="99" width="180" x="628" y="-125"/>    

@@ -4,17 +4,17 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import gurobi.GRB;
-import gurobi.GRB.DoubleAttr;
-import gurobi.GRBConstr;
-import gurobi.GRBEnv;
-import gurobi.GRBException;
-import gurobi.GRBLinExpr;
-import gurobi.GRBModel;
-import gurobi.GRBVar;
-import gurobi.GRB.DoubleParam;
-import gurobi.GRB.IntAttr;
-import gurobi.GRB.IntParam;
+import com.gurobi.gurobi.GRB;
+import com.gurobi.gurobi.GRB.DoubleAttr;
+import com.gurobi.gurobi.GRBConstr;
+import com.gurobi.gurobi.GRBEnv;
+import com.gurobi.gurobi.GRBException;
+import com.gurobi.gurobi.GRBLinExpr;
+import com.gurobi.gurobi.GRBModel;
+import com.gurobi.gurobi.GRBVar;
+import com.gurobi.gurobi.GRB.DoubleParam;
+import com.gurobi.gurobi.GRB.IntAttr;
+import com.gurobi.gurobi.GRB.IntParam;
 import shmarovfedor.areaplanning.graphics.MainFrame;
 import shmarovfedor.areaplanning.graphics.MapPanel;
 import shmarovfedor.areaplanning.model.BuildingManager;

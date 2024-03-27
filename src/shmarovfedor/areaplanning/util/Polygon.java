@@ -36,7 +36,7 @@ public class Polygon {
 		if (point.size() < 3) throw new IllegalArgumentException("Less than 3 points");
 		setVariables(point);
 		calculateCoeff();
-		if (!isConvex()) throw new IllegalArgumentException("Polygon is not convex");		
+		if (!isConvex()) throw new IllegalArgumentException("Polygon is not convex");
 		calculateArea();
 		calculateSigns();
 	}

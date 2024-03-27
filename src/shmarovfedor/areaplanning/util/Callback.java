@@ -10,7 +10,7 @@ import shmarovfedor.areaplanning.graphics.MapPanel;
 import shmarovfedor.areaplanning.model.BuildingManager;
 import shmarovfedor.areaplanning.model.SolutionManager;
 import shmarovfedor.areaplanning.background.BackgroundWorker;
-import gurobi.*;
+import com.gurobi.gurobi.*;
 
 public class Callback extends GRBCallback{
 
