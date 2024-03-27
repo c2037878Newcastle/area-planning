@@ -1,1 +1,9 @@
 */.svn/
+.idea/
+out/
+bin/
+img/
+*.iml
+Thumbs.db
+.project
+.classpath
