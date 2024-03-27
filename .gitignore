@@ -7,3 +7,4 @@ img/
 Thumbs.db
 .project
 .classpath
+*.log
