@@ -61,7 +61,7 @@ public class Optimizer {
 	private static int status = 0;
 	
 	/**
-	 * Creates the.
+	 * Class constructor
 	 *
 	 * @param polygon the polygon
 	 * @param building the building
@@ -73,10 +73,11 @@ public class Optimizer {
 	}
 	
 	/**
-	 * Sets the model.
+	 * Sets the model, including all mathematical constraints for solving the problem.
 	 */
 	public static void setModel() {
 
+		// Application Status: Initialising
 		setStatus(1);
 		
 		double[] vX = polygon.getX();
@@ -86,15 +87,15 @@ public class Optimizer {
 	    double[] b = polygon.getB();
 	    double[] c = polygon.getC();
 	    
-		//calculating maximum number of buildings of each type
+		// Calculating absolute maximum potential building number in area from total area size for each building type
 		maxN = new int[building.length];
 		for (int i = 0; i < maxN.length; i++) maxN[i] = (int)(polygon.getArea() / building[i].getArea());
 		
-		//calculating length of array
+		// Calculating length of array
 		int length = 0;
 		for (int i = 0; i < maxN.length; i++) length += maxN[i];
 		
-		//printing out length of array
+		// Printing lengths of array
 		double[] width = new double[length];
 	    double[] height = new double[length];
 	    
@@ -109,6 +110,7 @@ public class Optimizer {
 
 	    
 		try {
+			// Creation of Gurobi Optimiser
 			env = new GRBEnv("mip1.log");
 			env.set(IntParam.Method, 1);
 		    env.set(DoubleParam.TimeLimit, timeLimit);
@@ -135,7 +137,10 @@ public class Optimizer {
 					k++;
 				}
 			model.setObjective(objective, GRB.MAXIMIZE);
-			
+
+			/*
+			Breaking Symmetry - reduces search time by eliminating symmetric parts of a search space e.g. 011, 101 110
+			 */
 			GRBLinExpr expr = new GRBLinExpr();
 			k = 0;
 			for (int i = 0; i < maxN.length; i++) {
@@ -170,11 +175,11 @@ public class Optimizer {
 		    GRBVar[] z = model.addVars(null, null, null, typeZ, null);
 		    
 			model.update();
-			
-			
-			
-			//setting non-overlap constraint
-			//calculate values
+
+			/*
+			Setting non-overlap constraint for buildings
+			Calculate values
+			 */
 			double bigM = calculateMaxDistance(vX, vY, building);
 			double M1 = calculateMaxDistance(vX, vY, building);
 		    expr = new GRBLinExpr();
@@ -197,8 +202,13 @@ public class Optimizer {
 		    	}
 		    }
 			
-		    //setting bound variables
-		    //calculate value
+
+
+			/*
+			setting bound variables
+		    calculate value
+			Ensuring all vertices of buildings are in bounds
+			 */
 		    double M2 = 100000;
 			for (int i = 0; i < a.length; i++) {
 		    	for (int j = 0; j < length; j++) {
@@ -218,7 +228,10 @@ public class Optimizer {
 			
 			//setting exclusive polygons
 			List<Polygon> exclusivePolygon = RegionManager.getExclusivePolygons();
-			
+
+			/*
+			Ensuring all vertices of buildings are outside the excluded area
+			 */
 			for (k = 0; k < exclusivePolygon.size(); k++) {
 				a = exclusivePolygon.get(k).getA();
 				b = exclusivePolygon.get(k).getB();
@@ -261,7 +274,10 @@ public class Optimizer {
 					
 					double[] polX = exclusivePolygon.get(k).getX();
 					double[] polY = exclusivePolygon.get(k).getY();
-					
+
+					/*
+					Implementation of Vertical Constraint for buildings
+					 */
 					expr = new GRBLinExpr();
 					expr.addTerm(1.0, x[j]); expr.addTerm(M3, e[a.length]); model.addConstr(expr, GRB.GREATER_EQUAL, getMaxValue(polX) + width[j] / 2, null);
 					
@@ -487,10 +503,18 @@ public class Optimizer {
 		Optimizer.executionTermination = executionTermination;
 	}
 
+	/**
+	 * Gets the optimiser status
+	 * @return
+	 */
 	public static int getStatus() {
 		return status;
 	}
 
+	/**
+	 * Sets the optimiser status
+	 * @param status
+	 */
 	public static void setStatus(int status) {
 		Optimizer.status = status;
 	}
