@@ -7,8 +7,6 @@ import java.util.List;
 import shmarovfedor.areaplanning.util.Point;
 import shmarovfedor.areaplanning.util.Polygon;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class RegionManager.
  */
