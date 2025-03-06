@@ -16,7 +16,6 @@ import shmarovfedor.areaplanning.model.RegionManager;
 import shmarovfedor.areaplanning.util.Building;
 import shmarovfedor.areaplanning.util.Polygon;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class OptimizationManager.
  */
@@ -73,7 +72,7 @@ public class Optimizer {
 	}
 	
 	/**
-	 * Sets the model, including all mathematical constraints for solving the problem.
+	 * Sets the model, predominantly declaring all mathematical constraints for solving the problem.
 	 */
 	public static void setModel() {
 
@@ -110,7 +109,7 @@ public class Optimizer {
 
 	    
 		try {
-			// Creation of Gurobi Optimiser
+			// Initialisation of Gurobi Optimiser
 			env = new GRBEnv("mip1.log");
 			env.set(IntParam.Method, 1);
 		    env.set(DoubleParam.TimeLimit, timeLimit);
@@ -208,7 +207,7 @@ public class Optimizer {
 			setting bound variables
 		    calculate value
 			Ensuring all vertices of buildings are in bounds
-			 */
+			*/
 		    double M2 = 100000;
 			for (int i = 0; i < a.length; i++) {
 		    	for (int j = 0; j < length; j++) {
