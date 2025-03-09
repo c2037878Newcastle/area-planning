@@ -8,5 +8,5 @@ This project aims to maximise the construction profit for a predefined region by
 ```shell
 git clone https://github.com/shmarovfedor/area-planning.git
 ```
-3. If using IntelliJ, add the gurobi.jar file, located in the gurobi install folder as an external library. For all other IDEs, follow the application specific documentation to perform this task.
-4. Execute the program by running the [RunGUI](src/shmarovfedor/areaplanning/graphics/use/RunGUI.java) main program.
+3. Import the gradle project into Intellij IDEA by opening the `build.gradle.kts` file.
+4. Execute the program with `./gradlew run` or using the associated Intellij Gradle task.

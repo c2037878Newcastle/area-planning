@@ -3,6 +3,8 @@
 out/
 bin/
 img/
+.gradle/
+build/
 *.iml
 Thumbs.db
 .project
