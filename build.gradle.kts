@@ -1,10 +1,18 @@
 plugins {
     id("java-library")
     id("application")
+    id("idea")
 }
 
 group = "com.shmarov"
 version = "1.0.0"
+
+idea {
+    module {
+        isDownloadJavadoc = true
+        isDownloadSources = true
+    }
+}
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(23))
