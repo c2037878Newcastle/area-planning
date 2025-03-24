@@ -2,7 +2,7 @@
 .idea/
 out/
 bin/
-img/
+img/*
 .gradle/
 build/
 *.iml
@@ -10,3 +10,4 @@ Thumbs.db
 .project
 .classpath
 *.log
+notes/.obsidian
