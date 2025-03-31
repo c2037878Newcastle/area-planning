@@ -15,7 +15,7 @@ idea {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(23))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     withSourcesJar()
 }
 
