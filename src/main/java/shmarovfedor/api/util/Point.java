@@ -1,4 +1,4 @@
-package shmarovfedor.areaplanning.util;
+package shmarovfedor.api.util;
 
 // TODO: Auto-generated Javadoc
 /**

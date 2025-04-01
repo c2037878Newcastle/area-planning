@@ -1,11 +1,11 @@
-package shmarovfedor.areaplanning.model;
+package shmarovfedor.api.model;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import shmarovfedor.areaplanning.util.Point;
-import shmarovfedor.areaplanning.util.Polygon;
+import shmarovfedor.api.util.Point;
+import shmarovfedor.api.util.Polygon;
 
 /**
  * The Class RegionManager.

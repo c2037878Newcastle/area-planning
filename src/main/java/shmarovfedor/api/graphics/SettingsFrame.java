@@ -1,4 +1,4 @@
-package shmarovfedor.areaplanning.graphics;
+package shmarovfedor.api.graphics;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import shmarovfedor.areaplanning.background.BackgroundWorker;
-import shmarovfedor.areaplanning.model.SolutionManager;
+import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.areaplanning.solver.Optimizer;
 
 public class SettingsFrame extends JFrame{

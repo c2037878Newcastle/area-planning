@@ -2,8 +2,8 @@ package shmarovfedor.areaplanning.background;
 
 import javax.swing.SwingWorker;
 
-import shmarovfedor.areaplanning.model.BuildingManager;
-import shmarovfedor.areaplanning.model.SolutionManager;
+import shmarovfedor.api.model.BuildingManager;
+import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.areaplanning.solver.Optimizer;
 
 // TODO: Auto-generated Javadoc

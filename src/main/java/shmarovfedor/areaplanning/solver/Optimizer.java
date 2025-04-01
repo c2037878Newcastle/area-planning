@@ -11,10 +11,10 @@ import com.gurobi.gurobi.GRBModel;
 import com.gurobi.gurobi.GRBVar;
 import com.gurobi.gurobi.GRB.DoubleParam;
 import com.gurobi.gurobi.GRB.IntParam;
-import shmarovfedor.areaplanning.model.BuildingManager;
-import shmarovfedor.areaplanning.model.RegionManager;
-import shmarovfedor.areaplanning.util.Building;
-import shmarovfedor.areaplanning.util.Polygon;
+import shmarovfedor.api.model.BuildingManager;
+import shmarovfedor.api.model.RegionManager;
+import shmarovfedor.api.util.Building;
+import shmarovfedor.api.util.Polygon;
 
 /**
  * The Class OptimizationManager.

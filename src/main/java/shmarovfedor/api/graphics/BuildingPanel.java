@@ -1,19 +1,14 @@
-package shmarovfedor.areaplanning.graphics;
+package shmarovfedor.api.graphics;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import shmarovfedor.areaplanning.model.BuildingManager;
-import shmarovfedor.areaplanning.util.Building;
+import shmarovfedor.api.model.BuildingManager;
+import shmarovfedor.api.util.Building;
 
 public class BuildingPanel extends JPanel{
 

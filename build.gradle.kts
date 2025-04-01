@@ -28,5 +28,5 @@ dependencies {
 }
 
 application {
-    mainClass = "shmarovfedor.areaplanning.graphics.use.RunGUI"
+    mainClass = "shmarovfedor.RunGUI"
 }

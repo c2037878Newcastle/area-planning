@@ -1,12 +1,11 @@
-package shmarovfedor.areaplanning.model;
+package shmarovfedor.api.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import shmarovfedor.areaplanning.util.Building;
+import shmarovfedor.api.util.Building;
 
 // TODO: Auto-generated Javadoc
 /**

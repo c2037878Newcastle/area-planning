@@ -1,4 +1,4 @@
-package shmarovfedor.areaplanning.util;
+package shmarovfedor.api.util;
 
 import java.awt.Color;
 import java.util.Random;

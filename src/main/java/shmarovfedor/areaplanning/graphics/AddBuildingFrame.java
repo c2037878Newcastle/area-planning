@@ -13,8 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import shmarovfedor.areaplanning.model.BuildingManager;
-import shmarovfedor.areaplanning.util.Building;
+import shmarovfedor.api.model.BuildingManager;
+import shmarovfedor.api.util.Building;
 
 public class AddBuildingFrame extends JFrame{
 	private Color color = Color.WHITE;

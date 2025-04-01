@@ -3,11 +3,11 @@ package shmarovfedor.areaplanning.solver;
 import java.util.ArrayList;
 import java.util.List;
 
-import shmarovfedor.areaplanning.model.BuildingManager;
-import shmarovfedor.areaplanning.model.SolutionManager;
+import shmarovfedor.api.model.BuildingManager;
+import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.areaplanning.background.BackgroundWorker;
 import com.gurobi.gurobi.*;
-import shmarovfedor.areaplanning.util.Building;
+import shmarovfedor.api.util.Building;
 
 public class Callback extends GRBCallback{
 

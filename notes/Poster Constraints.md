@@ -27,3 +27,21 @@ $$
 {euclidean}((x_1, y_1), (x_2,y_2))=\sqrt{(x_1-x_2)^2+(y_1-y_2)^2}\\
 {manhattan}((x_1, y_1), (x_2,y_2))=|x_1-x_2|+|y_1-y_2|
 }$$
+
+$$
+\displaylines{
+ x > 10 \\ 
+ OR \\
+ x<5
+ }
+$$
+
+$$
+\displaylines{
+x+Mz_1 > 10\\
+AND\\
+x-Mz_2 < 5\\
+AND\\
+z_1+z_2 < 2
+}
+$$

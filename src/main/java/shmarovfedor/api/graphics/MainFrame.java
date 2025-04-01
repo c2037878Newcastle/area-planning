@@ -1,4 +1,4 @@
-package shmarovfedor.areaplanning.graphics;
+package shmarovfedor.api.graphics;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -13,12 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import shmarovfedor.areaplanning.background.BackgroundWorker;
-import shmarovfedor.areaplanning.model.BuildingManager;
-import shmarovfedor.areaplanning.model.RegionManager;
-import shmarovfedor.areaplanning.model.SolutionManager;
-import shmarovfedor.areaplanning.util.Building;
+import shmarovfedor.api.model.BuildingManager;
+import shmarovfedor.api.model.RegionManager;
+import shmarovfedor.api.model.SolutionManager;
+import shmarovfedor.api.util.Building;
 import shmarovfedor.areaplanning.solver.Optimizer;
-import shmarovfedor.areaplanning.util.Polygon;
+import shmarovfedor.api.util.Polygon;
 
 public class MainFrame extends JFrame{
 	

@@ -1,6 +1,6 @@
-package shmarovfedor.areaplanning.graphics.use;
+package shmarovfedor;
 
-import shmarovfedor.areaplanning.graphics.MainFrame;
+import shmarovfedor.api.graphics.MainFrame;
 
 public class RunGUI {
 

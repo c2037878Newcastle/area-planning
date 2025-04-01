@@ -1,4 +1,4 @@
-package shmarovfedor.areaplanning.graphics;
+package shmarovfedor.api.graphics;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -6,7 +6,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import shmarovfedor.areaplanning.model.SolutionManager;
+import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.areaplanning.solver.Optimizer;
 
 public class ProgressPanel extends JPanel{

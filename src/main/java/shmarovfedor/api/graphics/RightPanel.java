@@ -1,4 +1,6 @@
-package shmarovfedor.areaplanning.graphics;
+package shmarovfedor.api.graphics;
+
+import shmarovfedor.areaplanning.graphics.AddBuildingFrame;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
