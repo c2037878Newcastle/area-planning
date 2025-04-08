@@ -191,4 +191,7 @@ public class Polygon {
 		return area;
 	}
 
+	public int vertices() {
+		return getA().length;
+	}
 }

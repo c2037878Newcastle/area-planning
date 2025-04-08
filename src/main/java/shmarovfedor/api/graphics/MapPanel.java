@@ -288,7 +288,7 @@ public class MapPanel extends JPanel {
      * @param g the g
      */
     public void drawBuildings(Graphics g) {
-        List<Building> buildings = SolutionManager.getLast();
+        var buildings = SolutionManager.getLast();
         buildings.forEach(building -> {
             g.setColor(building.type().color());
             g.fillRect((int) (scale * (building.x() - building.type().width() / 2) + leftBound),

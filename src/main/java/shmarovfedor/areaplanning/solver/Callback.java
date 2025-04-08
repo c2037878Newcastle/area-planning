@@ -7,6 +7,7 @@ import com.gurobi.gurobi.GRBVar;
 import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingType;
+import shmarovfedor.api.util.SolutionBuilding;
 import shmarovfedor.areaplanning.background.BackgroundWorker;
 
 import java.util.ArrayList;
@@ -47,13 +48,13 @@ public class Callback extends GRBCallback {
 					objBound = getDoubleInfo(GRB.CB_MIPSOL_OBJBND);
 					*/
                     //adding solution to the solution list
-                    var solution = new ArrayList<Building>();
+                    var solution = new ArrayList<SolutionBuilding>();
                     var types = BuildingType.types();
                     int k = 0;
                     for (int i = 0; i < maxN.length; i++) {
                         for (int j = 0; j < maxN[i]; j++) {
                             if (Math.abs(nVar[k] - 1) < 0.1) {
-                                var building = new Building(types.get(i), xVar[k], yVar[k]);
+                                var building = new SolutionBuilding(types.get(i), xVar[k], yVar[k]);
                                 solution.add(building);
                             }
                             k++;

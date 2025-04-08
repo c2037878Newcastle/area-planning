@@ -2,6 +2,7 @@ package uk.co.rhilton.townplanning;
 
 import shmarovfedor.RunGUI;
 import shmarovfedor.api.graphics.BaseFrame;
+import shmarovfedor.api.graphics.SettingsFrame;
 import shmarovfedor.api.model.RegionManager;
 import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.problem.Problem;
@@ -52,16 +53,19 @@ public class TownProblem extends Problem {
         worker.execute();
     }
 
+
     public void skip() {
-        RunGUI.PROBLEMS[0].skip();
+        optimizer.terminate();
+        optimizer.setCorrectTermination(false);
     }
 
     public void terminate() {
-        RunGUI.PROBLEMS[0].terminate();
+        optimizer.terminateExecution();
     }
 
     public void openSettings() {
-        RunGUI.PROBLEMS[0].openSettings();
+        var settings = new SettingsFrame(this, 200, 200);
+        settings.setVisible(true);
     }
 
     public Optimizer optimizer() {

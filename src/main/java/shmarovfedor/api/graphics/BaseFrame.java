@@ -96,6 +96,7 @@ public abstract class BaseFrame extends JFrame {
 
         pack();
         setLocationRelativeTo(null); // fix for centre screen
+        requestFocus();
     }
 
     public abstract void createGUI();

@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static java.lang.Math.floor;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Building.
@@ -88,6 +90,10 @@ public abstract class BuildingType {
 
 	public double area() {
 		return height() * width();
+	}
+
+	public int countPerArea(double polygonArea) {
+		return (int) floor(polygonArea / area());
 	}
 
 }

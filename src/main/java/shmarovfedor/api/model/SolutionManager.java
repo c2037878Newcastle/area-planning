@@ -5,6 +5,7 @@ import java.util.List;
 
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.Building;
+import shmarovfedor.api.util.SolutionBuilding;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -13,7 +14,7 @@ import shmarovfedor.api.util.Building;
 public class SolutionManager {
 
 	/** The solutions. */
-	private static List<List<Building>> solutions = new ArrayList<>();
+	private static List<List<SolutionBuilding>> solutions = new ArrayList<>();
 	
 	/** The objective. */
 	private static double objective;
@@ -38,7 +39,7 @@ public class SolutionManager {
 	 * @param solution the solution
 	 * @return true, if successful
 	 */
-	public static boolean add(List<Building> solution) {
+	public static boolean add(List<SolutionBuilding> solution) {
 		return solutions.add(solution);
 	}
 
@@ -47,7 +48,7 @@ public class SolutionManager {
 	 *
 	 * @return the all
 	 */
-	public static List<List<Building>> getAll() {
+	public static List<List<SolutionBuilding>> getAll() {
 		return solutions;
 	}
 	
@@ -55,7 +56,7 @@ public class SolutionManager {
 	 * Reset.
 	 */
 	public static void reset() {
-		solutions = new ArrayList<List<Building>>();
+		solutions = new ArrayList<>();
 	}
 		
 	/**
@@ -81,7 +82,7 @@ public class SolutionManager {
 	 *
 	 * @return the last
 	 */
-	public static List<Building> getLast() {
+	public static List<SolutionBuilding> getLast() {
 		return solutions.getLast();
 	}
 

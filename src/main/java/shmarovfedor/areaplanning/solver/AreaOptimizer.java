@@ -1,12 +1,29 @@
 package shmarovfedor.areaplanning.solver;
 
-import com.gurobi.gurobi.*;
+import com.gurobi.gurobi.GRBEnv;
+import com.gurobi.gurobi.GRBException;
+import com.gurobi.gurobi.GRBLinExpr;
+import com.gurobi.gurobi.GRBModel;
 import shmarovfedor.api.model.RegionManager;
 import shmarovfedor.api.problem.Problem;
+import shmarovfedor.api.util.Building;
+import shmarovfedor.api.util.BuildingPair;
+import shmarovfedor.api.util.BuildingType;
 import shmarovfedor.api.util.Polygon;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
+import static com.gurobi.gurobi.GRB.*;
+import static com.gurobi.gurobi.GRB.DoubleParam.Heuristics;
+import static com.gurobi.gurobi.GRB.DoubleParam.TimeLimit;
+import static com.gurobi.gurobi.GRB.IntParam.Method;
+import static com.gurobi.gurobi.GRB.IntParam.OutputFlag;
+import static java.util.Arrays.stream;
 import static shmarovfedor.api.util.SolverState.INITIALIZATION;
 
 public class AreaOptimizer extends Optimizer {
@@ -20,101 +37,100 @@ public class AreaOptimizer extends Optimizer {
         // Application Status: Initialising
         setStatus(INITIALIZATION);
 
-        double[] vX = polygon.getX();
-        double[] vY = polygon.getY();
 
-        double[] a = polygon.getA();
-        double[] b = polygon.getB();
-        double[] c = polygon.getC();
+        double[] polyX = polygon.getX();
+        double[] polyY = polygon.getY();
 
         // Calculating absolute maximum potential building number in area from total area size for each building type
-        maxN = new int[types.length];
-        for (int i = 0; i < maxN.length; i++) maxN[i] = (int) (polygon.getArea() / types[i].area());
 
+
+        final var polyArea = polygon.getArea();
+        typeMax = new int[types.length];
+        for (int i = 0; i < typeMax.length; i++)
+            typeMax[i] = types[i].countPerArea(polyArea);
+
+        var totalMax = stream(typeMax).sum();
         // Calculating length of array
-        int length = 0;
-        for (int i = 0; i < maxN.length; i++) length += maxN[i];
 
-        // Printing lengths of array
-        double[] width = new double[length];
-        double[] height = new double[length];
+        buildings = new HashMap<>();
+        for (int i = 0; i < types.length; i++) {
+            var list = new ArrayList<Building>();
+            var type = types[i];
 
-        int k = 0;
-        for (int i = 0; i < maxN.length; i++) {
-            for (int j = 0; j < maxN[i]; j++) {
-                width[k] = types[i].width();
-                height[k] = types[i].height();
-                k++;
+            for (var j = 0; j < typeMax[i]; j++) {
+                list.add(new Building(type));
             }
+
+            buildings.put(type, list);
         }
 
 
         try {
             // Initialisation of Gurobi Optimiser
-            env = new GRBEnv("mip1.log");
-            env.set(GRB.IntParam.Method, 1);
-            env.set(GRB.DoubleParam.TimeLimit, timeLimit);
-            env.set(GRB.DoubleParam.Heuristics, 1);
-            env.set(GRB.IntParam.OutputFlag, 0);
+            environment = new GRBEnv("mip1.log");
+            environment.set(Method, 1);
+            environment.set(TimeLimit, timeLimit);
+            environment.set(Heuristics, 1);
+            environment.set(OutputFlag, 0);
 
-            model = new GRBModel(env);
-
-
-            //creating array of type
-            char[] typeN = new char[length];
-            for (int i = 0; i < length; i++) typeN[i] = GRB.BINARY;
+            model = new GRBModel(environment);
 
             //creating variables
-            n = model.addVars(null, null, null, typeN, null);
+            var included = model.addVars(totalMax, BINARY);
+            var atK = new AtomicInteger(0);
+            buildings
+                    .values()
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .forEach(building -> {
+                                building.setGlobalIndex(atK.getAndIncrement());
+                                building.setIncludedVariable(included[building.globalIndex()]);
+                            }
+                    );
             model.update();
 
             //setting objective
-            GRBLinExpr objective = new GRBLinExpr();
-            k = 0;
-            for (int i = 0; i < maxN.length; i++)
-                for (int j = 0; j < maxN[i]; j++) {
-                    objective.addTerm(types[i].benefit(), n[k]);
-                    k++;
-                }
-            model.setObjective(objective, GRB.MAXIMIZE);
+            var objective = new GRBLinExpr();
+            buildings
+                    .values()
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .forEach(building ->
+                            objective.addTerm(building.benefit(), building.included())
+                    );
+            model.setObjective(objective, MAXIMIZE);
 
 			/*
 			Breaking Symmetry - reduces search time by eliminating symmetric parts of a search space e.g. 011, 101 110
 			 */
-            GRBLinExpr expr = new GRBLinExpr();
-            k = 0;
-            for (int i = 0; i < maxN.length; i++) {
-                for (int j = 0; j < maxN[i] - 1; j++) {
-                    expr = new GRBLinExpr();
-                    expr.addTerm(-1.0, n[k]);
-                    expr.addTerm(1.0, n[k + 1]);
-                    model.addConstr(expr, GRB.LESS_EQUAL, 0, null);
-                    k++;
-                }
-                k++;
-            }
-
-            //types of variables
-            char[] typeX = new char[length];
-            char[] typeY = new char[length];
-
-            for (int i = 0; i < length; i++) {
-                typeX[i] = GRB.CONTINUOUS;
-                typeY[i] = GRB.CONTINUOUS;
-            }
-
-            GRBVar[] x = model.addVars(null, null, null, typeX, null);
-            GRBVar[] y = model.addVars(null, null, null, typeY, null);
+            buildings
+                    .keySet()
+                    .stream()
+                    .map(type -> {
+                        var list = buildings.get(type);
+                        var pairs = new ArrayList<BuildingPair>();
+                        for (var i = 0; i < list.size() - 1; i++) {
+                            var first = list.get(i);
+                            var second = list.get(i + 1);
+                            pairs.add(new BuildingPair(first, second));
+                        }
+                        return pairs;
+                    })
+                    .flatMap(Collection::stream)
+                    .forEach(this::breakSymmetry);
 
             int zLength = 0;
-            for (int i = 0; i < length - 1; i++)
-                for (int j = i + 1; j < length; j++) zLength++;
-
+            for (int i = 0; i < totalMax - 1; i++)
+                for (int j = i + 1; j < totalMax; j++) zLength++;
             zLength *= 4;
 
-            char[] typeZ = new char[zLength];
-            for (int i = 0; i < zLength; i++) typeZ[i] = GRB.BINARY;
-            GRBVar[] z = model.addVars(null, null, null, typeZ, null);
+            var x = model.addVars(totalMax, CONTINUOUS);
+            var y = model.addVars(totalMax, CONTINUOUS);
+
+            buildings.values().stream().flatMap(Collection::stream).forEach(b -> {
+                b.setXVar(x[b.globalIndex()]);
+                b.setYVar(y[b.globalIndex()]);
+            });
 
             model.update();
 
@@ -122,81 +138,33 @@ public class AreaOptimizer extends Optimizer {
 			Setting non-overlap constraint for buildings
 			Calculate values
 			 */
-            double bigM = calculateMaxDistance(vX, vY, types);
-            double M1 = calculateMaxDistance(vX, vY, types);
-            expr = new GRBLinExpr();
-            k = 0;
-            for (int i = 0; i < length - 1; i++) {
-                for (int j = i + 1; j < length; j++) {
+            var allBuildings = buildings
+                    .values()
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .toList();
+            var allPairs = allBuildings.stream()
+                    .map(b -> allBuildings
+                            .stream()
+                            .filter(b2 -> !b2.equals(b))
+                            .map(b2 -> new BuildingPair(b, b2))
+                            .toList()
+                    )
+                    .flatMap(Collection::stream)
+                    .toList(); // TODO remove duplicates
 
-                    expr = new GRBLinExpr();
-                    expr.addTerm(1.0, x[i]);
-                    expr.addTerm(-1.0, x[j]);
-                    expr.addTerm(-bigM, z[k]);
-                    expr.addTerm(M1, n[i]);
-                    expr.addTerm(M1, n[j]);
-                    model.addConstr(expr, GRB.LESS_EQUAL, 2 * M1 - (width[i] + width[j]) / 2, null);
-                    expr = new GRBLinExpr();
-                    expr.addTerm(-1.0, x[i]);
-                    expr.addTerm(1.0, x[j]);
-                    expr.addTerm(-bigM, z[k + 1]);
-                    expr.addTerm(M1, n[i]);
-                    expr.addTerm(M1, n[j]);
-                    model.addConstr(expr, GRB.LESS_EQUAL, 2 * M1 - (width[i] + width[j]) / 2, null);
-                    expr = new GRBLinExpr();
-                    expr.addTerm(1.0, y[i]);
-                    expr.addTerm(-1.0, y[j]);
-                    expr.addTerm(-bigM, z[k + 2]);
-                    expr.addTerm(M1, n[i]);
-                    expr.addTerm(M1, n[j]);
-                    model.addConstr(expr, GRB.LESS_EQUAL, 2 * M1 - (height[i] + height[j]) / 2, null);
-                    expr = new GRBLinExpr();
-                    expr.addTerm(-1.0, y[i]);
-                    expr.addTerm(1.0, y[j]);
-                    expr.addTerm(-bigM, z[k + 3]);
-                    expr.addTerm(M1, n[i]);
-                    expr.addTerm(M1, n[j]);
-                    model.addConstr(expr, GRB.LESS_EQUAL, 2 * M1 - (height[i] + height[j]) / 2, null);
-                    expr = new GRBLinExpr();
-                    expr.addTerm(1.0, z[k]);
-                    expr.addTerm(1.0, z[k + 1]);
-                    expr.addTerm(1.0, z[k + 2]);
-                    expr.addTerm(1.0, z[k + 3]);
-                    model.addConstr(expr, GRB.LESS_EQUAL, 3, null);
-                    k = k + 4;
-
-                }
-            }
-
-
+            var bigM = calculateMaxDistance(polyX, polyY, types);
+            allPairs.forEach(pair -> nonOverlap(pair, bigM));
 
 			/*
 			setting bound variables
 		    calculate value
 			Ensuring all vertices of buildings are in bounds
 			*/
-            double M2 = 100000;
-            for (int i = 0; i < a.length; i++) {
-                for (int j = 0; j < length; j++) {
-                    double minD = Double.MAX_VALUE;
-                    if (-c[i] + a[i] * width[j] / 2 + b[i] * height[j] / 2 < minD)
-                        minD = -c[i] + a[i] * width[j] / 2 + b[i] * height[j] / 2;
-                    if (-c[i] - a[i] * width[j] / 2 + b[i] * height[j] / 2 < minD)
-                        minD = -c[i] - a[i] * width[j] / 2 + b[i] * height[j] / 2;
-                    if (-c[i] + a[i] * width[j] / 2 - b[i] * height[j] / 2 < minD)
-                        minD = -c[i] + a[i] * width[j] / 2 - b[i] * height[j] / 2;
-                    if (-c[i] - a[i] * width[j] / 2 - b[i] * height[j] / 2 < minD)
-                        minD = -c[i] - a[i] * width[j] / 2 - b[i] * height[j] / 2;
-
-                    expr = new GRBLinExpr();
-                    expr.addTerm(a[i], x[j]);
-                    expr.addTerm(b[i], y[j]);
-                    expr.addTerm(M2, n[j]);
-                    model.addConstr(expr, GRB.LESS_EQUAL, M2 + minD, null);
-
-                }
+            for (int vertex = 0; vertex < polygon.vertices(); vertex++) {
+                final var fVertex = vertex;
+                allBuildings.forEach(b -> insideBounds(fVertex, b, 100000, polygon));
             }
-
 
             //setting exclusive polygons
             List<Polygon> exclusivePolygon = RegionManager.getExclusivePolygons();
@@ -204,91 +172,28 @@ public class AreaOptimizer extends Optimizer {
 			/*
 			Ensuring all vertices of buildings are outside the excluded area
 			 */
-            for (k = 0; k < exclusivePolygon.size(); k++) {
-                a = exclusivePolygon.get(k).getA();
-                b = exclusivePolygon.get(k).getB();
-                c = exclusivePolygon.get(k).getC();
+            for (var exPolygon : exclusivePolygon) {
+                var vertexCount = exPolygon.getA().length;
 
-                double M3 = Double.MAX_VALUE;
-                for (int j = 0; j < length; j++) {
+                allBuildings.forEach(building -> {
+                    try {
+                        var excludedBin = model.addVars(vertexCount + 4, BINARY);
+                        model.update();
 
-                    char[] typeE = new char[a.length + 4];
-                    for (int i = 0; i < a.length + 4; i++) typeE[i] = GRB.BINARY;
-                    GRBVar[] e = model.addVars(null, null, null, typeE, null);
-                    model.update();
-
-                    for (int i = 0; i < a.length; i++) {
-                        M2 = 1000;
-
-                        double maxD = -Double.MAX_VALUE;
-                        if (-c[i] + a[i] * width[j] / 2 + b[i] * height[j] / 2 > maxD)
-                            maxD = -c[i] + a[i] * width[j] / 2 + b[i] * height[j] / 2;
-                        if (-c[i] - a[i] * width[j] / 2 + b[i] * height[j] / 2 > maxD)
-                            maxD = -c[i] - a[i] * width[j] / 2 + b[i] * height[j] / 2;
-                        if (-c[i] + a[i] * width[j] / 2 - b[i] * height[j] / 2 > maxD)
-                            maxD = -c[i] + a[i] * width[j] / 2 - b[i] * height[j] / 2;
-                        if (-c[i] - a[i] * width[j] / 2 - b[i] * height[j] / 2 > maxD)
-                            maxD = -c[i] - a[i] * width[j] / 2 - b[i] * height[j] / 2;
-
-                        expr = new GRBLinExpr();
-                        expr.addTerm(a[i], x[j]);
-                        expr.addTerm(b[i], y[j]);
-                        expr.addTerm(M2, n[j]);
-                        expr.addTerm(M3, e[i]);
-                        model.addConstr(expr, GRB.GREATER_EQUAL, M2 + maxD, null);
-
-						/*
-						expr = new GRBLinExpr();
-						expr.addTerm(a[i], x[j]); expr.addTerm(b[i], y[j]); expr.addTerm(M2, n[j]); expr.addTerm(M3, e[i]); model.addConstr(expr, GRB.GREATER_EQUAL, M2 - c[i] + a[i] * width[j] / 2 + b[i] * height[j] / 2, null);
-
-						expr = new GRBLinExpr();
-						expr.addTerm(a[i], x[j]); expr.addTerm(b[i], y[j]); expr.addTerm(M2, n[j]); expr.addTerm(M3, e[i]); model.addConstr(expr, GRB.GREATER_EQUAL, M2 - c[i] - a[i] * width[j] / 2 + b[i] * height[j] / 2, null);
-
-						expr = new GRBLinExpr();
-						expr.addTerm(a[i], x[j]); expr.addTerm(b[i], y[j]); expr.addTerm(M2, n[j]); expr.addTerm(M3, e[i]); model.addConstr(expr, GRB.GREATER_EQUAL, M2 - c[i] + a[i] * width[j] / 2 - b[i] * height[j] / 2, null);
-
-						expr = new GRBLinExpr();
-						expr.addTerm(a[i], x[j]); expr.addTerm(b[i], y[j]); expr.addTerm(M2, n[j]); expr.addTerm(M3, e[i]); model.addConstr(expr, GRB.GREATER_EQUAL, M2 - c[i] - a[i] * width[j] / 2 - b[i] * height[j] / 2, null);
-						*/
+                        for (int vertex = 0; vertex < vertexCount; vertex++) {
+                            outsideBounds(vertex, building, exPolygon, excludedBin[vertex]);
+                        }
+                        verticalConstraints(building, vertexCount, excludedBin, exPolygon);
+                    } catch (GRBException e) {
+                        throw new RuntimeException(e);
                     }
-
-                    double[] polX = exclusivePolygon.get(k).getX();
-                    double[] polY = exclusivePolygon.get(k).getY();
-
-					/*
-					Implementation of Vertical Constraint for buildings
-					 */
-                    expr = new GRBLinExpr();
-                    expr.addTerm(1.0, x[j]);
-                    expr.addTerm(M3, e[a.length]);
-                    model.addConstr(expr, GRB.GREATER_EQUAL, getMaxValue(polX) + width[j] / 2, null);
-
-                    expr = new GRBLinExpr();
-                    expr.addTerm(-1.0, x[j]);
-                    expr.addTerm(M3, e[a.length + 1]);
-                    model.addConstr(expr, GRB.GREATER_EQUAL, -getMinValue(polX) + width[j] / 2, null);
-
-                    expr = new GRBLinExpr();
-                    expr.addTerm(1.0, y[j]);
-                    expr.addTerm(M3, e[a.length + 2]);
-                    model.addConstr(expr, GRB.GREATER_EQUAL, getMaxValue(polY) + height[j] / 2, null);
-
-                    expr = new GRBLinExpr();
-                    expr.addTerm(-1.0, y[j]);
-                    expr.addTerm(M3, e[a.length + 3]);
-                    model.addConstr(expr, GRB.GREATER_EQUAL, -getMinValue(polY) + height[j] / 2, null);
-
-                    expr = new GRBLinExpr();
-                    for (int i = 0; i < a.length + 4; i++) expr.addTerm(1.0, e[i]);
-                    model.addConstr(expr, GRB.LESS_EQUAL, a.length + 4 - 1, null);
-
-                }
+                });
 
             }
 
             //setting callback
             //setLowerBound(SolutionManager.getCurrentBound());
-            model.setCallback(new Callback(this, x, y, n, maxN));
+            model.setCallback(new Callback(this, x, y, included, typeMax));
 
         } catch (GRBException e) {
             e.printStackTrace();
