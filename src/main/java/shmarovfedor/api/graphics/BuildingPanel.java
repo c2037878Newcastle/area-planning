@@ -3,12 +3,11 @@ package shmarovfedor.api.graphics;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JPanel;
 
-import shmarovfedor.api.model.BuildingManager;
-import shmarovfedor.api.util.Building;
+import static shmarovfedor.api.util.BuildingType.stream;
 
 public class BuildingPanel extends JPanel{
 
@@ -33,7 +32,7 @@ public class BuildingPanel extends JPanel{
 		super.paintComponent(g);
 		drawBorder(g);
 		drawHeader(g);
-		drawBuildings(g);
+		drawBuildingTypes(g);
 		repaint();
 	}
 		
@@ -51,25 +50,25 @@ public class BuildingPanel extends JPanel{
 		g.drawString("Buildings:", 10, 20);
 	}
 	
-	public void drawBuildings(Graphics g) {
-		List<Building> building = BuildingManager.getAll();
-		int position = 40;
-		for (int i = 0; i < building.size(); i++) {
+	public void drawBuildingTypes(Graphics g) {
+		var types = stream();
+		var position = new AtomicInteger(40);
+		types.forEachOrdered(type -> {
 			g.setColor(Color.BLACK);
-			g.drawString(building.get(i).getName() + ": " +
-							building.get(i).getWidth() + "m x " +
-							building.get(i).getHeight() + "m x £" +
-							building.get(i).getBenefit(), 20, position);
+			int pos = position.get();
+			g.drawString(type.id() + ": " +
+					type.width() + "m x " +
+					type.height() + "m x £" +
+					type.benefit(), 20, pos);
 
-			g.setColor(building.get(i).getColor());
-			g.fillRect(5, position - 10, 10, 10);	
-			
+			g.setColor(type.color());
+			g.fillRect(5, pos - 10, 10, 10);
+
 			g.setColor(Color.BLACK);
-			g.drawRect(5, position - 10, 10, 10);
-		
-			position += 20;
-		}
-		
+			g.drawRect(5, pos - 10, 10, 10);
+
+			position.set(pos + 20);
+		});		
 	}
 	
 }

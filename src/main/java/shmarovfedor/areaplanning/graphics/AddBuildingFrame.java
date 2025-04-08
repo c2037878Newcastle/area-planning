@@ -13,8 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import shmarovfedor.api.model.BuildingManager;
-import shmarovfedor.api.util.Building;
+import shmarovfedor.api.util.BuildingType;
+import shmarovfedor.areaplanning.building.SimpleBuilding;
+
+import static java.util.Optional.of;
 
 public class AddBuildingFrame extends JFrame{
 	private Color color = Color.WHITE;
@@ -59,29 +61,26 @@ public class AddBuildingFrame extends JFrame{
 		getContentPane().add(chooseButton);
 		getContentPane().add(confirmButton);
 		
-		confirmButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					double width = Double.parseDouble(widthTextField.getText());
-					double height = Double.parseDouble(heightTextField.getText());
-					double benefit = Double.parseDouble(benefitTextField.getText());
-					String name = nameTextField.getText();
-					
-					if (BuildingManager.get(name) == null) {
-						try {
-							BuildingManager.add(new Building(width, height, benefit, color, name));
-							dispose();	
-						} catch(IllegalArgumentException exception) {
-							JOptionPane.showMessageDialog(new JFrame(), exception.getMessage());	
-						}
-					} else {
-						JOptionPane.showMessageDialog(new JFrame(), "Building with this name already exists");
-					}
-				} catch(NumberFormatException exception) {
-					JOptionPane.showMessageDialog(new JFrame(), "Wrong number format " + exception.getLocalizedMessage());
-				}
-			}
-		});
+		confirmButton.addActionListener(e -> {
+            try {
+                double width1 = Double.parseDouble(widthTextField.getText());
+                double height1 = Double.parseDouble(heightTextField.getText());
+                double benefit = Double.parseDouble(benefitTextField.getText());
+                String name = nameTextField.getText();
+
+                if (BuildingType.byID(name).isEmpty()) {
+                    try {
+                        new SimpleBuilding(name, width1, height1, benefit, of(color));
+                        dispose();
+                    } catch(IllegalArgumentException exception) {
+                        JOptionPane.showMessageDialog(new JFrame(), exception.getMessage());
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(), "Building with this name already exists");
+                }
+            } catch(NumberFormatException exception) {
+                JOptionPane.showMessageDialog(new JFrame(), "Wrong number format " + exception.getLocalizedMessage());
+            }
+        });
 	}
 }

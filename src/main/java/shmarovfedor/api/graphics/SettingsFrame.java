@@ -1,87 +1,76 @@
 package shmarovfedor.api.graphics;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-
-import shmarovfedor.areaplanning.background.BackgroundWorker;
 import shmarovfedor.api.model.SolutionManager;
-import shmarovfedor.areaplanning.solver.Optimizer;
+import shmarovfedor.api.problem.Problem;
+import shmarovfedor.areaplanning.background.BackgroundWorker;
 
-public class SettingsFrame extends JFrame{
+import javax.swing.*;
+import java.awt.*;
 
-	public SettingsFrame(int width, int height) {
-		super();
-		setSize(new Dimension(width, height));
-		setResizable(false);
-		
-		JLabel timeLimitLabel = new JLabel("Time limit:");
-		JLabel boundLabel = new JLabel("Bound:");
-				
-		final JTextField timeLimitTextField = new JTextField();
-		timeLimitTextField.setText(String.valueOf(Optimizer.getTimeLimit()));
-		final JTextField boundTextField = new JTextField();
-		boundTextField.setText(String.valueOf(SolutionManager.getLowerBound()));
-		
-		JButton confirmButton = new JButton("Confirm");
-		
-		JCheckBox binarySearch = new JCheckBox("Binary", BackgroundWorker.isBinarySearch());
-		
-		setLayout(new GridLayout(4, 2));
-		
-		getContentPane().add(timeLimitLabel);
-		getContentPane().add(timeLimitTextField);
-		getContentPane().add(boundLabel);
-		getContentPane().add(boundTextField);
-		getContentPane().add(binarySearch);
-		getContentPane().add(new JLabel());
-		getContentPane().add(new JLabel());
-		getContentPane().add(confirmButton);
-		
-		binarySearch.addActionListener(new ActionListener() {
+public class SettingsFrame extends JFrame {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				BackgroundWorker.setBinarySearch(!BackgroundWorker.isBinarySearch());				
-			}
-			
-		});
-		
-		confirmButton.addActionListener(new ActionListener() {
+    private final Problem problem;
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					double timeLimit = Double.parseDouble(timeLimitTextField.getText());
-					double bound = Double.parseDouble(boundTextField.getText());
-					
-					//SolutionManager.setCurrentBound(bound);
-					SolutionManager.setLowerBound(bound);		
-					if (timeLimit > 0) {
-						Optimizer.setTimeLimit(timeLimit);
-						dispose();
-					} else {
-						JOptionPane.showMessageDialog(new JFrame(), "Time limit must be positive");
-					}
-				
-				} catch(NumberFormatException exception) {
-					JOptionPane.showMessageDialog(new JFrame(), "Wrong number format. " + exception.getMessage());
-				}
-			}
-			
-		});
-		
-				
-	}
-	
-	
-	
+    public SettingsFrame(Problem problem, int width, int height) {
+        super();
+        this.problem = problem;
+        setSize(new Dimension(width, height));
+        setResizable(false);
+
+        JLabel timeLimitLabel = new JLabel("Time limit:");
+        JLabel boundLabel = new JLabel("Bound:");
+
+        final JTextField timeLimitTextField = new JTextField();
+        timeLimitTextField.setText(String.valueOf(problem.optimizer().getTimeLimit()));
+        final JTextField boundTextField = new JTextField();
+        boundTextField.setText(String.valueOf(SolutionManager.getLowerBound()));
+
+        JButton confirmButton = new JButton("Confirm");
+
+        JCheckBox binarySearch = new JCheckBox("Binary");
+        problem
+                .worker()
+                .map(BackgroundWorker::isBinarySearch)
+                .ifPresent(binarySearch::setSelected);
+
+        setLayout(new GridLayout(4, 2));
+
+        getContentPane().add(timeLimitLabel);
+        getContentPane().add(timeLimitTextField);
+        getContentPane().add(boundLabel);
+        getContentPane().add(boundTextField);
+        getContentPane().add(binarySearch);
+        getContentPane().add(new JLabel());
+        getContentPane().add(new JLabel());
+        getContentPane().add(confirmButton);
+
+        binarySearch.addActionListener(e ->
+                problem.worker().ifPresent(w ->
+                        w.setBinarySearch(!w.isBinarySearch())
+                )
+        );
+
+        confirmButton.addActionListener(e -> {
+            try {
+                double timeLimit = Double.parseDouble(timeLimitTextField.getText());
+                double bound = Double.parseDouble(boundTextField.getText());
+
+                //SolutionManager.setCurrentBound(bound);
+                SolutionManager.setLowerBound(bound);
+                if (timeLimit > 0) {
+                    problem.optimizer().setTimeLimit(timeLimit);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(), "Time limit must be positive");
+                }
+
+            } catch (NumberFormatException exception) {
+                JOptionPane.showMessageDialog(new JFrame(), "Wrong number format. " + exception.getMessage());
+            }
+        });
+
+
+    }
+
+
 }

@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import shmarovfedor.api.model.SolutionManager;
+import shmarovfedor.api.problem.Problem;
 import shmarovfedor.areaplanning.solver.Optimizer;
 
 public class ProgressPanel extends JPanel{
@@ -19,8 +20,11 @@ public class ProgressPanel extends JPanel{
 	
 	private int width;
 	private int height;
+
+	private final Problem problem;
 	
-	public ProgressPanel(int width, int height) {
+	public ProgressPanel(Problem problem, int width, int height) {
+		this.problem = problem;
 		this.width = width;
 		this.height = height;
 		setPreferredSize(new Dimension(width, height));
@@ -77,31 +81,10 @@ public class ProgressPanel extends JPanel{
 		g.setColor(Color.BLACK);
 		
 		
-		String status = null;
-		
-		switch(Optimizer.getStatus()) {
-		
-			case 0:
-				status = "Waiting";
-				break;
-				
-			case 1:
-				status = "Initialization";
-				break;
-				
-			case 2:
-				status = "In progress";
-				break;
-
-			case 3:
-				status = "Terminated";
-				break;
-
-			case 4:
-				status = "Recalculation";
-				break;
-				
-		}
+		String status = problem
+				.optimizer()
+				.getStatus()
+				.name();
 		
 		g.drawString("Status: " + status, 10, 120);
 

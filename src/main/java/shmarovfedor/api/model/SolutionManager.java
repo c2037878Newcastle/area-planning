@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shmarovfedor.api.util.Building;
+import shmarovfedor.api.util.Building;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -12,7 +13,7 @@ import shmarovfedor.api.util.Building;
 public class SolutionManager {
 
 	/** The solutions. */
-	private static List<List<Building>> solutions = new ArrayList<List<Building>>();
+	private static List<List<Building>> solutions = new ArrayList<>();
 	
 	/** The objective. */
 	private static double objective;
@@ -28,7 +29,7 @@ public class SolutionManager {
 	private static double currentBound;
 	
 	public static void clear() {
-		solutions = new ArrayList<List<Building>>();
+		solutions = new ArrayList<>();
 	}
 		
 	/**
@@ -81,7 +82,7 @@ public class SolutionManager {
 	 * @return the last
 	 */
 	public static List<Building> getLast() {
-		return solutions.get(solutions.size() - 1);
+		return solutions.getLast();
 	}
 
 	

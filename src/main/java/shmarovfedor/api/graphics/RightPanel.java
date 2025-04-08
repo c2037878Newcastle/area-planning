@@ -1,5 +1,6 @@
 package shmarovfedor.api.graphics;
 
+import shmarovfedor.api.problem.Problem;
 import shmarovfedor.areaplanning.graphics.AddBuildingFrame;
 
 import java.awt.BorderLayout;
@@ -27,14 +28,14 @@ public class RightPanel extends JPanel{
 	private int width;
 	private int height;
 	
-	public RightPanel(int width, int height) {
+	public RightPanel(Problem problem, int width, int height) {
 		super();
 		this.width = width;
 		this.height = height;
 
 		setPreferredSize(new Dimension(width, height));
 		
-		progressPanel = new ProgressPanel(width, 140);
+		progressPanel = new ProgressPanel(problem, width, 140);
 		buildingPanel = new BuildingPanel(width, height);
 		
 		addButton = new JButton("Add");

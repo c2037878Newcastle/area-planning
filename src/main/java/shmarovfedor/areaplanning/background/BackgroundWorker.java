@@ -1,69 +1,76 @@
 package shmarovfedor.areaplanning.background;
 
-import javax.swing.SwingWorker;
-
-import shmarovfedor.api.model.BuildingManager;
 import shmarovfedor.api.model.SolutionManager;
-import shmarovfedor.areaplanning.solver.Optimizer;
+import shmarovfedor.api.problem.Problem;
+import shmarovfedor.api.util.BuildingType;
+
+import javax.swing.*;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * The Class BackgroundWorker.
  */
-public class BackgroundWorker  extends SwingWorker<String, Object>{
+public class BackgroundWorker extends SwingWorker<String, Object> {
+    
+    private final Problem problem;
 
-	private static boolean binarySearch = true;
-	
-	public static boolean isBinarySearch() {
-		return binarySearch;
-	}
+    public BackgroundWorker(Problem problem) {
+        this.problem = problem;
+    }
 
-	public static void setBinarySearch(boolean binarySearch) {
-		BackgroundWorker.binarySearch = binarySearch;
-	}
+    private boolean binarySearch = true;
 
-	/* (non-Javadoc)
-	 * @see javax.swing.SwingWorker#doInBackground()
-	 */
-	@Override
-	protected String doInBackground() throws Exception {
-		Optimizer.setModel();
-		if (binarySearch) {
-			Optimizer.optimize();
-			double lowerBound = SolutionManager.getLowerBound();
-			double upperBound = SolutionManager.getObjectiveUpperBound();
-			Optimizer.dispose();
-			while((upperBound - lowerBound) >= BuildingManager.getPrecision())
-			{
-				double bound = (upperBound + lowerBound) / 2;
-				SolutionManager.setLowerBound(lowerBound);
-				SolutionManager.setUpperBound(upperBound);
-				SolutionManager.setCurrentBound(bound);
-				
-				Optimizer.setModel();
-				Optimizer.setLowerBound(bound);
-				Optimizer.optimize();
-				if (Optimizer.isCorrectTermination()) lowerBound = bound; else upperBound = bound;
-				if (Optimizer.isExecutionTermination()) {
-					Optimizer.terminateExecution();
-					Optimizer.dispose();
-					break;
-				}
-			}
-		} else {
-			Optimizer.removeLowerBound();
-			Optimizer.setLowerBound(SolutionManager.getLowerBound());
-			Optimizer.optimize();
-			if (!Optimizer.isExecutionTermination()) Optimizer.terminateExecution();
-			Optimizer.dispose();
-		}
-		
-		if (!Optimizer.isExecutionTermination()) {
-			Optimizer.terminateExecution();
-			Optimizer.dispose();
-		}
+    public boolean isBinarySearch() {
+        return binarySearch;
+    }
 
-		return null;
-	}
+    public void setBinarySearch(boolean binarySearch) {
+        this.binarySearch = binarySearch;
+    }
+
+    /* (non-Javadoc)
+     * @see javax.swing.SwingWorker#doInBackground()
+     */
+    @Override
+    protected String doInBackground() throws Exception {
+        problem.optimizer().setModel();
+        if (binarySearch) {
+            problem.optimizer().optimize();
+            double lowerBound = SolutionManager.getLowerBound();
+            double upperBound = SolutionManager.getObjectiveUpperBound();
+            problem.optimizer().dispose();
+            while ((upperBound - lowerBound) >= BuildingType.getPrecision()) {
+                double bound = (upperBound + lowerBound) / 2;
+                SolutionManager.setLowerBound(lowerBound);
+                SolutionManager.setUpperBound(upperBound);
+                SolutionManager.setCurrentBound(bound);
+
+                problem.optimizer().setModel();
+                problem.optimizer().setLowerBound(bound);
+                problem.optimizer().optimize();
+                if (problem.optimizer().isCorrectTermination()) lowerBound = bound;
+                else upperBound = bound;
+                if (problem.optimizer().isExecutionTermination()) {
+                    problem.optimizer().terminateExecution();
+                    problem.optimizer().dispose();
+                    break;
+                }
+            }
+        } else {
+            problem.optimizer().removeLowerBound();
+            problem.optimizer().setLowerBound(SolutionManager.getLowerBound());
+            problem.optimizer().optimize();
+            if (!problem.optimizer().isExecutionTermination()) problem.optimizer().terminateExecution();
+            problem.optimizer().dispose();
+        }
+
+        if (!problem.optimizer().isExecutionTermination()) {
+            problem.optimizer().terminateExecution();
+            problem.optimizer().dispose();
+        }
+
+        return null;
+    }
 
 }
