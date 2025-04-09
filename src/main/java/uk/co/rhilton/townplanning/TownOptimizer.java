@@ -21,8 +21,7 @@ import java.util.stream.Collectors;
 import static com.gurobi.gurobi.GRB.*;
 import static com.gurobi.gurobi.GRB.DoubleParam.Heuristics;
 import static com.gurobi.gurobi.GRB.DoubleParam.TimeLimit;
-import static com.gurobi.gurobi.GRB.IntParam.Method;
-import static com.gurobi.gurobi.GRB.IntParam.OutputFlag;
+import static com.gurobi.gurobi.GRB.IntParam.*;
 import static java.util.Arrays.stream;
 import static shmarovfedor.api.util.SolverState.INITIALIZATION;
 
@@ -35,7 +34,7 @@ public class TownOptimizer extends Optimizer {
     }
 
     public TownProblem problem() {
-        return problem();
+        return (TownProblem) super.problem();
     }
 
     public void setModel() {
@@ -79,7 +78,7 @@ public class TownOptimizer extends Optimizer {
             environment.set(Method, 1);
             environment.set(TimeLimit, timeLimit);
             environment.set(Heuristics, 1);
-            environment.set(OutputFlag, 0);
+            environment.set(OutputFlag, 1);
 
             model = new GRBModel(environment);
 
