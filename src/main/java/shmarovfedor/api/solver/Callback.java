@@ -1,14 +1,14 @@
-package shmarovfedor.areaplanning.solver;
+package shmarovfedor.api.solver;
 
 import com.gurobi.gurobi.GRB;
 import com.gurobi.gurobi.GRBCallback;
 import com.gurobi.gurobi.GRBException;
 import com.gurobi.gurobi.GRBVar;
 import shmarovfedor.api.model.SolutionManager;
-import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingType;
 import shmarovfedor.api.util.SolutionBuilding;
-import shmarovfedor.areaplanning.background.BackgroundWorker;
+import shmarovfedor.api.background.BackgroundWorker;
+import shmarovfedor.areaplanning.solver.Optimizer;
 
 import java.util.ArrayList;
 
@@ -26,8 +26,6 @@ public class Callback extends GRBCallback {
         this.y = y;
         this.n = n;
         this.maxN = maxN;
-        //MainFrame mainFrame = new MainFrame();
-        //mainFrame.setVisible(true);
     }
 
     @Override

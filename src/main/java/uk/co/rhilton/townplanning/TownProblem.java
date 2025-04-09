@@ -1,13 +1,11 @@
 package uk.co.rhilton.townplanning;
 
-import shmarovfedor.RunGUI;
-import shmarovfedor.api.graphics.BaseFrame;
 import shmarovfedor.api.graphics.SettingsFrame;
 import shmarovfedor.api.model.RegionManager;
 import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.Polygon;
-import shmarovfedor.areaplanning.background.BackgroundWorker;
+import shmarovfedor.api.background.BackgroundWorker;
 import shmarovfedor.areaplanning.solver.Optimizer;
 import uk.co.rhilton.townplanning.building.HouseBuilding;
 import uk.co.rhilton.townplanning.building.ShopBuilding;
@@ -24,13 +22,16 @@ public class TownProblem extends Problem {
     private BackgroundWorker worker;
     private TownFrame frame;
 
+    private HouseBuilding houseType;
+    private ShopBuilding shopType;
+
     public void initialize() {
         // TODO load config
 
         optimizer = new TownOptimizer(this);
         // register custom building types
-        new HouseBuilding();
-        new ShopBuilding();
+        houseType = new HouseBuilding();
+        shopType = new ShopBuilding();
 
         frame = new TownFrame(this);
         frame.setVisible(true);
@@ -76,5 +77,11 @@ public class TownProblem extends Problem {
         return ofNullable(worker);
     }
 
+    public HouseBuilding houseType() {
+        return houseType;
+    }
 
+    public ShopBuilding shopType() {
+        return shopType;
+    }
 }

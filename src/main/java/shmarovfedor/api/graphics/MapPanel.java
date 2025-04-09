@@ -22,6 +22,11 @@ import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingType;
 import shmarovfedor.api.util.Point;
 import shmarovfedor.api.util.Polygon;
+import uk.co.rhilton.townplanning.building.HouseBuilding;
+
+import static java.lang.Math.abs;
+import static uk.co.rhilton.townplanning.building.HouseBuilding.HOUSE_ID;
+import static uk.co.rhilton.townplanning.building.ShopBuilding.SHOP_ID;
 
 // TODO: Auto-generated Javadoc
 

@@ -5,7 +5,15 @@ import java.util.List;
 
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.Building;
+import shmarovfedor.api.util.BuildingType;
 import shmarovfedor.api.util.SolutionBuilding;
+import uk.co.rhilton.townplanning.building.HouseBuilding;
+import uk.co.rhilton.townplanning.building.ShopBuilding;
+
+import static java.lang.Math.abs;
+import static uk.co.rhilton.townplanning.TownOptimizer.maxShopDistance;
+import static uk.co.rhilton.townplanning.building.HouseBuilding.HOUSE_ID;
+import static uk.co.rhilton.townplanning.building.ShopBuilding.SHOP_ID;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -40,6 +48,20 @@ public class SolutionManager {
 	 * @return true, if successful
 	 */
 	public static boolean add(List<SolutionBuilding> solution) {
+		var shops = solution.stream().filter(b -> b.type() instanceof ShopBuilding).count();
+		var houses = solution.stream().filter(b -> b.type() instanceof HouseBuilding).count();
+		var v = solution.stream().filter(b -> b.type().id().equals(HOUSE_ID)).mapToDouble(h ->
+				solution.stream().filter(b -> b.type().id().equals(SHOP_ID)).mapToDouble(s ->
+						abs(h.x() - s.x()) + abs(h.y() - s.y())
+				).min().orElse(0)
+		).max().orElse(0);
+
+		System.out.println("Solution[Shops: " + shops + ", Houses: " + houses + ", Max distance: " + v + "]");
+		if(shops == 0) System.out.println("NO SHOPS");
+		if(houses == 0) System.out.println("NO HOUSES");
+		if(v > maxShopDistance + 0.1) System.out.println("Distance exceeded: " + v);
+
+
 		return solutions.add(solution);
 	}
 

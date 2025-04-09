@@ -4,7 +4,7 @@ import com.gurobi.gurobi.GRBVar;
 
 import java.util.Objects;
 
-public final class Building {
+public class Building {
     private final BuildingType type;
 
     private int globalIndex;

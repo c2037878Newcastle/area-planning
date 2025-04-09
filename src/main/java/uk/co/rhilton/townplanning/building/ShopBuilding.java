@@ -21,14 +21,18 @@ public class ShopBuilding extends BuildingType {
     }
 
     public double width() {
-        return 10;
+        return 20;
     }
 
     public double height() {
-        return 10;
+        return 15;
     }
 
     public double benefit() {
-        return 10;
+        return 50;
+    }
+
+    public Building createInstance() {
+        return new Building(this);
     }
 }

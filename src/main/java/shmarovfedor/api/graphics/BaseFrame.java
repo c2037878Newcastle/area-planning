@@ -10,14 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import shmarovfedor.api.problem.Problem;
-import shmarovfedor.areaplanning.background.BackgroundWorker;
-import shmarovfedor.api.model.RegionManager;
-import shmarovfedor.api.model.SolutionManager;
-import shmarovfedor.areaplanning.solver.Optimizer;
-import shmarovfedor.api.util.Polygon;
+import shmarovfedor.api.background.BackgroundWorker;
 
 import static java.lang.System.currentTimeMillis;
-import static shmarovfedor.api.util.BuildingType.types;
 
 public abstract class BaseFrame extends JFrame {
 

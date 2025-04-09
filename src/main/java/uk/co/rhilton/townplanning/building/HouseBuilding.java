@@ -31,4 +31,8 @@ public class HouseBuilding extends BuildingType {
     public double benefit() {
         return 1000;
     }
+
+    public Building createInstance() {
+        return new Building(this);
+    }
 }

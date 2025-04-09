@@ -6,7 +6,7 @@ import shmarovfedor.api.model.RegionManager;
 import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.Polygon;
-import shmarovfedor.areaplanning.background.BackgroundWorker;
+import shmarovfedor.api.background.BackgroundWorker;
 import shmarovfedor.areaplanning.graphics.AreaFrame;
 import shmarovfedor.areaplanning.solver.AreaOptimizer;
 import shmarovfedor.areaplanning.solver.Optimizer;

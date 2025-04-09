@@ -2,7 +2,14 @@ package shmarovfedor.api.util;
 
 import java.util.Objects;
 
-public record BuildingPair(Building first, Building second) {
+public class BuildingPair {
+    private final Building first;
+    private final Building second;
+
+    public BuildingPair(Building first, Building second) {
+        this.first = first;
+        this.second = second;
+    }
 
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -20,4 +27,18 @@ public record BuildingPair(Building first, Building second) {
             return 31 * first.hashCode() + second.hashCode();
         } else return 31 * second.hashCode() + first.hashCode();
     }
+
+    public Building first() {
+        return first;
+    }
+
+    public Building second() {
+        return second;
+    }
+
+    @Override
+    public String toString() {
+        return "BuildingPair[" + first + ", " + second + ']';
+    }
+
 }

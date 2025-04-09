@@ -7,8 +7,6 @@ import shmarovfedor.api.util.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.gurobi.gurobi.GRB.BINARY;
 import static shmarovfedor.api.util.SolverState.*;
@@ -150,7 +148,7 @@ public abstract class Optimizer {
     public void nonOverlap(BuildingPair pair, double bigM) {
         try {
             var toggles = model.addVars(4, BINARY);
-
+            model.update();
 
             var expr = new GRBLinExpr();
             expr.addTerm(1.0, pair.first().xVar());
@@ -219,7 +217,7 @@ public abstract class Optimizer {
 
         var expr = new GRBLinExpr();
         expr.addTerm(a[vertex], building.xVar());
-        expr.addTerm(b[vertex],  building.yVar());
+        expr.addTerm(b[vertex], building.yVar());
         expr.addTerm(M, building.included());
 
         try {
@@ -304,6 +302,7 @@ public abstract class Optimizer {
      */
     public void optimize() {
         try {
+            System.out.println("OPTIMIZING");
             setStatus(IN_PROGRESS);
             setCorrectTermination(false);
             model.optimize();
@@ -358,8 +357,8 @@ public abstract class Optimizer {
                     .stream()
                     .flatMap(Collection::stream)
                     .forEach(b ->
-                    expr.addTerm(b.benefit(), b.included())
-            );
+                            expr.addTerm(b.benefit(), b.included())
+                    );
             lowerBoundConstraint = model.addConstr(expr, GRB.GREATER_EQUAL, newBound, null);
             lowerBoundPerturbationConstraint = model.addConstr(expr, GRB.LESS_EQUAL, newBound + BuildingType.getPrecision() - 0.0001, null);
             objectiveBound = newBound;

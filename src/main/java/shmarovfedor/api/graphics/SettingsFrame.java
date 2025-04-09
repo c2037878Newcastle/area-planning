@@ -2,7 +2,7 @@ package shmarovfedor.api.graphics;
 
 import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.problem.Problem;
-import shmarovfedor.areaplanning.background.BackgroundWorker;
+import shmarovfedor.api.background.BackgroundWorker;
 
 import javax.swing.*;
 import java.awt.*;

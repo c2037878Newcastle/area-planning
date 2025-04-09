@@ -35,4 +35,8 @@ public class SimpleBuilding extends BuildingType {
     public double benefit() {
         return benefit;
     }
+
+    public Building createInstance() {
+        return new Building(this);
+    }
 }

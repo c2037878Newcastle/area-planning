@@ -6,9 +6,9 @@ import com.gurobi.gurobi.GRBLinExpr;
 import com.gurobi.gurobi.GRBModel;
 import shmarovfedor.api.model.RegionManager;
 import shmarovfedor.api.problem.Problem;
+import shmarovfedor.api.solver.Callback;
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingPair;
-import shmarovfedor.api.util.BuildingType;
 import shmarovfedor.api.util.Polygon;
 
 import java.util.ArrayList;
@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static com.gurobi.gurobi.GRB.*;
 import static com.gurobi.gurobi.GRB.DoubleParam.Heuristics;
@@ -58,7 +57,7 @@ public class AreaOptimizer extends Optimizer {
             var type = types[i];
 
             for (var j = 0; j < typeMax[i]; j++) {
-                list.add(new Building(type));
+                list.add(type.createInstance());
             }
 
             buildings.put(type, list);
@@ -77,17 +76,17 @@ public class AreaOptimizer extends Optimizer {
 
             //creating variables
             var included = model.addVars(totalMax, BINARY);
+            model.update();
             var atK = new AtomicInteger(0);
             buildings
                     .values()
                     .stream()
                     .flatMap(Collection::stream)
                     .forEach(building -> {
-                                building.setGlobalIndex(atK.getAndIncrement());
-                                building.setIncludedVariable(included[building.globalIndex()]);
+                        building.setGlobalIndex(atK.getAndIncrement());
+                        building.setIncludedVariable(included[building.globalIndex()]);
                             }
                     );
-            model.update();
 
             //setting objective
             var objective = new GRBLinExpr();
