@@ -8,7 +8,6 @@ import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.util.BuildingType;
 import shmarovfedor.api.util.SolutionBuilding;
 import shmarovfedor.api.background.BackgroundWorker;
-import shmarovfedor.areaplanning.solver.Optimizer;
 
 import java.util.ArrayList;
 
@@ -61,12 +60,8 @@ public class Callback extends GRBCallback {
                     SolutionManager.add(solution);
                     SolutionManager.setObjective(objective);
                     SolutionManager.setObjectiveUpperBound(objBound);
-                    optimizer.problem()
-                            .worker()
-                            .filter(BackgroundWorker::isBinarySearch)
-                            .ifPresent(b ->
-                                    optimizer.problem().optimizer().terminate()
-                            );
+                    if (optimizer.problem().worker().isBinarySearch())
+                        optimizer.problem().optimizer().terminate();
                 }
             }
         } catch (GRBException e) {

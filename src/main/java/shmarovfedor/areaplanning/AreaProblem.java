@@ -9,9 +9,7 @@ import shmarovfedor.api.util.Polygon;
 import shmarovfedor.api.background.BackgroundWorker;
 import shmarovfedor.areaplanning.graphics.AreaFrame;
 import shmarovfedor.areaplanning.solver.AreaOptimizer;
-import shmarovfedor.areaplanning.solver.Optimizer;
-
-import java.util.Optional;
+import shmarovfedor.api.solver.Optimizer;
 
 import static shmarovfedor.api.util.BuildingType.types;
 
@@ -63,7 +61,7 @@ public class AreaProblem extends Problem {
         return optimizer;
     }
 
-    public Optional<BackgroundWorker> worker() {
-        return Optional.ofNullable(worker);
+    public BackgroundWorker worker() {
+        return worker;
     }
 }

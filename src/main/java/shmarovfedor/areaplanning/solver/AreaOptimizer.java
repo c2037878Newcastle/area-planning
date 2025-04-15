@@ -1,12 +1,10 @@
 package shmarovfedor.areaplanning.solver;
 
-import com.gurobi.gurobi.GRBEnv;
-import com.gurobi.gurobi.GRBException;
-import com.gurobi.gurobi.GRBLinExpr;
-import com.gurobi.gurobi.GRBModel;
+import com.gurobi.gurobi.*;
 import shmarovfedor.api.model.RegionManager;
 import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.solver.Callback;
+import shmarovfedor.api.solver.Optimizer;
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingPair;
 import shmarovfedor.api.util.Polygon;
@@ -22,6 +20,7 @@ import static com.gurobi.gurobi.GRB.DoubleParam.Heuristics;
 import static com.gurobi.gurobi.GRB.DoubleParam.TimeLimit;
 import static com.gurobi.gurobi.GRB.IntParam.Method;
 import static com.gurobi.gurobi.GRB.IntParam.OutputFlag;
+import static java.lang.System.arraycopy;
 import static java.util.Arrays.stream;
 import static shmarovfedor.api.util.SolverState.INITIALIZATION;
 
@@ -44,7 +43,7 @@ public class AreaOptimizer extends Optimizer {
 
 
         final var polyArea = polygon.getArea();
-        typeMax = new int[types.length];
+        var typeMax = new int[types.length];
         for (int i = 0; i < typeMax.length; i++)
             typeMax[i] = types[i].countPerArea(polyArea);
 
@@ -70,7 +69,8 @@ public class AreaOptimizer extends Optimizer {
             environment.set(Method, 1);
             environment.set(TimeLimit, timeLimit);
             environment.set(Heuristics, 1);
-            environment.set(OutputFlag, 0);
+            environment.set(OutputFlag, 1);
+//            environment.set(IntParam.ConcurrentMIP, 24);
 
             model = new GRBModel(environment);
 
@@ -83,8 +83,8 @@ public class AreaOptimizer extends Optimizer {
                     .stream()
                     .flatMap(Collection::stream)
                     .forEach(building -> {
-                        building.setGlobalIndex(atK.getAndIncrement());
-                        building.setIncludedVariable(included[building.globalIndex()]);
+                                building.setGlobalIndex(atK.getAndIncrement());
+                                building.setIncludedVariable(included[building.globalIndex()]);
                             }
                     );
 
@@ -118,11 +118,6 @@ public class AreaOptimizer extends Optimizer {
                     .flatMap(Collection::stream)
                     .forEach(this::breakSymmetry);
 
-            int zLength = 0;
-            for (int i = 0; i < totalMax - 1; i++)
-                for (int j = i + 1; j < totalMax; j++) zLength++;
-            zLength *= 4;
-
             var x = model.addVars(totalMax, CONTINUOUS);
             var y = model.addVars(totalMax, CONTINUOUS);
 
@@ -153,7 +148,13 @@ public class AreaOptimizer extends Optimizer {
                     .toList(); // TODO remove duplicates
 
             var bigM = calculateMaxDistance(polyX, polyY, types);
-            allPairs.forEach(pair -> nonOverlap(pair, bigM));
+            var toggles = model.addVars(4 * allPairs.size(), BINARY);
+            model.update();
+            for (var i = 0; i < allPairs.size(); i++) {
+                var subToggle = new GRBVar[4];
+                arraycopy(toggles, i * 4, subToggle, 0, 4);
+                nonOverlap(allPairs.get(i), bigM, subToggle);
+            }
 
 			/*
 			setting bound variables
@@ -173,16 +174,24 @@ public class AreaOptimizer extends Optimizer {
 			 */
             for (var exPolygon : exclusivePolygon) {
                 var vertexCount = exPolygon.getA().length;
+                var checkCount = vertexCount + 4;
+                var excludedBin = model.addVars(allBuildings.size() * (checkCount), BINARY);
+                model.update();
+
+                atK.set(0);
 
                 allBuildings.forEach(building -> {
                     try {
-                        var excludedBin = model.addVars(vertexCount + 4, BINARY);
-                        model.update();
+                        var subExcludedBin = new GRBVar[checkCount];
+                        arraycopy(
+                                excludedBin, atK.getAndIncrement() * checkCount,
+                                subExcludedBin, 0, checkCount
+                        );
 
                         for (int vertex = 0; vertex < vertexCount; vertex++) {
-                            outsideBounds(vertex, building, exPolygon, excludedBin[vertex]);
+                            outsideBounds(vertex, building, exPolygon, subExcludedBin[vertex]);
                         }
-                        verticalConstraints(building, vertexCount, excludedBin, exPolygon);
+                        verticalConstraints(building, vertexCount, subExcludedBin, exPolygon);
                     } catch (GRBException e) {
                         throw new RuntimeException(e);
                     }

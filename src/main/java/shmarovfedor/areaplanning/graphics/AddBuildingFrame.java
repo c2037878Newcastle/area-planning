@@ -38,12 +38,7 @@ public class AddBuildingFrame extends JFrame{
 		final JTextField benefitTextField = new JTextField();
 		JButton chooseButton = new JButton("Choose");
 		
-		chooseButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {				
-				color = JColorChooser.showDialog(new JFrame(), "Choose color", Color.WHITE);
-			}
-		});
+		chooseButton.addActionListener(e -> color = JColorChooser.showDialog(new JFrame(), "Choose color", Color.WHITE));
 		
 		JButton confirmButton = new JButton("Confirm");
 		

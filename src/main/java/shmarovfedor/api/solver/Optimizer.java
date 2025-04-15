@@ -1,4 +1,4 @@
-package shmarovfedor.areaplanning.solver;
+package shmarovfedor.api.solver;
 
 import com.gurobi.gurobi.*;
 import shmarovfedor.api.problem.Problem;
@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static com.gurobi.gurobi.GRB.BINARY;
 import static shmarovfedor.api.util.SolverState.*;
 
 /**
@@ -30,56 +29,15 @@ public abstract class Optimizer {
     /**
      * The time limit.
      */
-    protected double timeLimit = 60;
+    protected double timeLimit = 3600;
 
-    /**
-     * The model.
-     */
     protected GRBModel model;
-
-    /**
-     * The env.
-     */
     protected GRBEnv environment;
-
-    /**
-     * The max n.
-     */
-    protected int[] typeMax;
-
-    /**
-     * The polygon.
-     */
     protected Polygon polygon;
-
-    /**
-     * The building.
-     */
     protected BuildingType[] types;
-
-    /**
-     * The n.
-     */
-//    protected GRBVar[] buildingIncluded;
-
-    /**
-     * The objective bound.
-     */
     protected double objectiveBound;
-
-    /**
-     * The correct termination.
-     */
     protected boolean correctTermination;
-
-    /**
-     * The execution termination.
-     */
     protected boolean executionTermination;
-
-    /**
-     * The lower bound constraint.
-     */
     protected GRBConstr lowerBoundConstraint;
 
     protected GRBConstr lowerBoundPerturbationConstraint;
@@ -145,10 +103,8 @@ public abstract class Optimizer {
         return maxDistance + maxSize;
     }
 
-    public void nonOverlap(BuildingPair pair, double bigM) {
+    public void nonOverlap(BuildingPair pair, double bigM, GRBVar[] toggles) {
         try {
-            var toggles = model.addVars(4, BINARY);
-            model.update();
 
             var expr = new GRBLinExpr();
             expr.addTerm(1.0, pair.first().xVar());

@@ -13,13 +13,13 @@ import shmarovfedor.api.util.Polygon;
 public class RegionManager {
 	
 	/** The points. */
-	private static List<Point> points = new ArrayList<Point>();
+	private static List<Point> points = new ArrayList<>();
 	
 	/** The polygon. */
 	private static Polygon polygon;
 	
 	/** The exclusive polygon. */
-	private static List<Polygon> exclusivePolygon = new ArrayList<Polygon>();
+	private static List<Polygon> exclusivePolygon = new ArrayList<>();
 	
 	/**
 	 * Adds the point.
@@ -44,7 +44,7 @@ public class RegionManager {
 	 * Clear points.
 	 */
 	public static void clearPoints() {
-		points = new ArrayList<Point>();
+		points = new ArrayList<>();
 	}
 	
 	/**

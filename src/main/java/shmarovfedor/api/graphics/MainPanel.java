@@ -44,87 +44,27 @@ public class MainPanel extends JPanel{
 		addMainPolygonButton = new JButton("Main polygon");
 		addExclusivePolygonButton = new JButton("Exclude polygon");
 		
-		zoomInButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mapPanel.zoomIn();				
-			}
-			
-		});
+		zoomInButton.addActionListener(e -> mapPanel.zoomIn());
 		
-		zoomOutButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mapPanel.zoomOut();				
-			}
-			
-		});
+		zoomOutButton.addActionListener(e -> mapPanel.zoomOut());
 		
-		leftButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mapPanel.moveLeft();				
-			}
-			
-		});
+		leftButton.addActionListener(e -> mapPanel.moveLeft());
 		
-		rightButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mapPanel.moveRight();				
-			}
-			
-		});
+		rightButton.addActionListener(e -> mapPanel.moveRight());
 		
-		upButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mapPanel.moveUp();				
-			}
-			
-		});
+		upButton.addActionListener(e -> mapPanel.moveUp());
 		
-		downButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mapPanel.moveDown();				
-			}
-			
-		});
+		downButton.addActionListener(e -> mapPanel.moveDown());
 		
-		clearButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				RegionManager.clearPoints();
-				
-			}
-			
-		});
+		clearButton.addActionListener(e -> RegionManager.clearPoints());
 		
-		addMainPolygonButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!RegionManager.createPolygon()) JOptionPane.showMessageDialog(new JFrame(), "The polygon you entered is not convex");
-			}
-			
-		});
+		addMainPolygonButton.addActionListener(e -> {
+            if (!RegionManager.createPolygon()) JOptionPane.showMessageDialog(new JFrame(), "The polygon you entered is not convex");
+        });
 		
-		addExclusivePolygonButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!RegionManager.addExclusivePolygon()) JOptionPane.showMessageDialog(new JFrame(), "The polygon you entered is not convex");
-			}
-			
-		});
+		addExclusivePolygonButton.addActionListener(e -> {
+            if (!RegionManager.addExclusivePolygon()) JOptionPane.showMessageDialog(new JFrame(), "The polygon you entered is not convex");
+        });
 		
 		zoomPanel.add(addMainPolygonButton);
 		zoomPanel.add(addExclusivePolygonButton);

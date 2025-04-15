@@ -27,11 +27,8 @@ public class SettingsFrame extends JFrame {
 
         JButton confirmButton = new JButton("Confirm");
 
-        JCheckBox binarySearch = new JCheckBox("Binary");
-        problem
-                .worker()
-                .map(BackgroundWorker::isBinarySearch)
-                .ifPresent(binarySearch::setSelected);
+        JCheckBox binarySearch = new JCheckBox("Binary", problem.worker().isBinarySearch());
+
 
         setLayout(new GridLayout(4, 2));
 
@@ -44,11 +41,7 @@ public class SettingsFrame extends JFrame {
         getContentPane().add(new JLabel());
         getContentPane().add(confirmButton);
 
-        binarySearch.addActionListener(e ->
-                problem.worker().ifPresent(w ->
-                        w.setBinarySearch(!w.isBinarySearch())
-                )
-        );
+        binarySearch.addActionListener(e -> problem.worker().setBinarySearch(!problem.worker().isBinarySearch()));
 
         confirmButton.addActionListener(e -> {
             try {

@@ -2,9 +2,7 @@ package shmarovfedor.api.problem;
 
 import shmarovfedor.api.graphics.BaseFrame;
 import shmarovfedor.api.background.BackgroundWorker;
-import shmarovfedor.areaplanning.solver.Optimizer;
-
-import java.util.Optional;
+import shmarovfedor.api.solver.Optimizer;
 
 public abstract class Problem {
 
@@ -24,6 +22,6 @@ public abstract class Problem {
 
     public abstract Optimizer optimizer();
 
-    public abstract Optional<BackgroundWorker> worker();
+    public abstract BackgroundWorker worker();
 
 }

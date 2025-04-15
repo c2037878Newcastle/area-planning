@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.problem.Problem;
-import shmarovfedor.areaplanning.solver.Optimizer;
 
 public class ProgressPanel extends JPanel{
 	

@@ -37,11 +37,18 @@ public class BackgroundWorker extends SwingWorker<String, Object> {
         System.out.println("WORKING");
         problem.optimizer().setModel();
         if (binarySearch) {
+            System.out.println("pre optimize");
             problem.optimizer().optimize();
+            System.out.println("optimized");
             double lowerBound = SolutionManager.getLowerBound();
             double upperBound = SolutionManager.getObjectiveUpperBound();
+            System.out.println("lowerBound = " + lowerBound);
+            System.out.println("upperBound = " + upperBound);
+            System.out.println("BuildingType.getPrecision() = " + BuildingType.getPrecision());
             problem.optimizer().dispose();
+            System.out.println("disposed");
             while ((upperBound - lowerBound) >= BuildingType.getPrecision()) {
+                System.out.println("binary recursing");
                 double bound = (upperBound + lowerBound) / 2;
                 SolutionManager.setLowerBound(lowerBound);
                 SolutionManager.setUpperBound(upperBound);
@@ -49,6 +56,7 @@ public class BackgroundWorker extends SwingWorker<String, Object> {
 
                 problem.optimizer().setModel();
                 problem.optimizer().setLowerBound(bound);
+                System.out.println("optimize 2");
                 problem.optimizer().optimize();
                 if (problem.optimizer().isCorrectTermination()) lowerBound = bound;
                 else upperBound = bound;
@@ -61,6 +69,7 @@ public class BackgroundWorker extends SwingWorker<String, Object> {
         } else {
             problem.optimizer().removeLowerBound();
             problem.optimizer().setLowerBound(SolutionManager.getLowerBound());
+            System.out.println("non binary optimize");
             problem.optimizer().optimize();
             if (!problem.optimizer().isExecutionTermination()) problem.optimizer().terminateExecution();
             problem.optimizer().dispose();

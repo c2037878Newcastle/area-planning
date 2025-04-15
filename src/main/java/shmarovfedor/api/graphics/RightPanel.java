@@ -39,15 +39,10 @@ public class RightPanel extends JPanel{
 		buildingPanel = new BuildingPanel(width, height);
 		
 		addButton = new JButton("Add");
-		addButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				AddBuildingFrame addBuildingFrame = new AddBuildingFrame(200, 200);
-				addBuildingFrame.setVisible(true);
-			}
-			
-		});
+		addButton.addActionListener(e -> {
+            AddBuildingFrame addBuildingFrame = new AddBuildingFrame(200, 200);
+            addBuildingFrame.setVisible(true);
+        });
 		
 		setLayout(new BorderLayout());
 		

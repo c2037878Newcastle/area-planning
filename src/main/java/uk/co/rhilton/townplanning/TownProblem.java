@@ -6,12 +6,10 @@ import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.Polygon;
 import shmarovfedor.api.background.BackgroundWorker;
-import shmarovfedor.areaplanning.solver.Optimizer;
+import shmarovfedor.api.solver.Optimizer;
 import uk.co.rhilton.townplanning.building.HouseBuilding;
 import uk.co.rhilton.townplanning.building.ShopBuilding;
 import uk.co.rhilton.townplanning.gui.TownFrame;
-
-import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 import static shmarovfedor.api.util.BuildingType.types;
@@ -73,8 +71,8 @@ public class TownProblem extends Problem {
         return optimizer;
     }
 
-    public Optional<BackgroundWorker> worker() {
-        return ofNullable(worker);
+    public BackgroundWorker worker() {
+        return worker;
     }
 
     public HouseBuilding houseType() {

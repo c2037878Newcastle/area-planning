@@ -7,7 +7,7 @@ import shmarovfedor.api.solver.Callback;
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingPair;
 import shmarovfedor.api.util.Polygon;
-import shmarovfedor.areaplanning.solver.Optimizer;
+import shmarovfedor.api.solver.Optimizer;
 import uk.co.rhilton.townplanning.building.HouseBuilding;
 import uk.co.rhilton.townplanning.building.ShopBuilding;
 
@@ -22,6 +22,9 @@ import static com.gurobi.gurobi.GRB.*;
 import static com.gurobi.gurobi.GRB.DoubleParam.Heuristics;
 import static com.gurobi.gurobi.GRB.DoubleParam.TimeLimit;
 import static com.gurobi.gurobi.GRB.IntParam.*;
+import static com.gurobi.gurobi.GRB.IntParam.Method;
+import static com.gurobi.gurobi.GRB.IntParam.OutputFlag;
+import static java.lang.System.arraycopy;
 import static java.util.Arrays.stream;
 import static shmarovfedor.api.util.SolverState.INITIALIZATION;
 
@@ -52,7 +55,7 @@ public class TownOptimizer extends Optimizer {
 
 
         final var polyArea = polygon.getArea();
-        typeMax = new int[types.length];
+        var typeMax = new int[types.length];
         for (int i = 0; i < typeMax.length; i++)
             typeMax[i] = types[i].countPerArea(polyArea);
 
@@ -156,7 +159,13 @@ public class TownOptimizer extends Optimizer {
                     .toList(); // TODO remove duplicates
 
             var bigM = calculateMaxDistance(polyX, polyY, types);
-            allPairs.forEach(pair -> nonOverlap(pair, bigM));
+            var toggles = model.addVars(4 * allPairs.size(), BINARY);
+            model.update();
+            for (var i = 0; i < allPairs.size(); i++) {
+                var subToggle = new GRBVar[4];
+                arraycopy(toggles, i * 4, subToggle, 0, 4);
+                nonOverlap(allPairs.get(i), bigM, subToggle);
+            }
 
 			/*
 			setting bound variables
@@ -177,15 +186,24 @@ public class TownOptimizer extends Optimizer {
             for (var exPolygon : exclusivePolygon) {
                 var vertexCount = exPolygon.getA().length;
 
+                var checkCount = vertexCount + 4;
+                var excludedBin = model.addVars(allBuildings.size() * (checkCount), BINARY);
+                model.update();
+
+                atK.set(0);
+
                 allBuildings.forEach(building -> {
                     try {
-                        var excludedBin = model.addVars(vertexCount + 4, BINARY);
-                        model.update();
+                        var subExcludedBin = new GRBVar[checkCount];
+                        arraycopy(
+                                excludedBin, atK.getAndIncrement() * checkCount,
+                                subExcludedBin, 0, checkCount
+                        );
 
                         for (int vertex = 0; vertex < vertexCount; vertex++) {
-                            outsideBounds(vertex, building, exPolygon, excludedBin[vertex]);
+                            outsideBounds(vertex, building, exPolygon, subExcludedBin[vertex]);
                         }
-                        verticalConstraints(building, vertexCount, excludedBin, exPolygon);
+                        verticalConstraints(building, vertexCount, subExcludedBin, exPolygon);
                     } catch (GRBException e) {
                         throw new RuntimeException(e);
                     }
@@ -345,7 +363,6 @@ public class TownOptimizer extends Optimizer {
 
             model.update();
             //setting callback
-            //setLowerBound(SolutionManager.getCurrentBound());
             model.setCallback(new Callback(this, x, y, included, typeMax));
 
         } catch (GRBException e) {

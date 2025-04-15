@@ -114,9 +114,7 @@ public abstract class BaseFrame extends JFrame {
             }
             case IN_PROGRESS -> {
                 startButton.setEnabled(false);
-                problem.worker()
-                        .map(BackgroundWorker::isBinarySearch)
-                        .ifPresent(skipButton::setEnabled);
+                skipButton.setEnabled(problem.worker().isBinarySearch());
                 terminateButton.setEnabled(true);
                 settingsButton.setEnabled(false);
                 rightPanel.getAddButton().setEnabled(false);
