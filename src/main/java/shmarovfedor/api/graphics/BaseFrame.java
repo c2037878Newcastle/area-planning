@@ -103,21 +103,21 @@ public abstract class BaseFrame extends JFrame {
                 skipButton.setEnabled(false);
                 terminateButton.setEnabled(false);
                 settingsButton.setEnabled(true);
-                rightPanel.getAddButton().setEnabled(true);
+                if (problem.allowUserBuildings()) rightPanel.getAddButton().setEnabled(true);
             }
             case INITIALIZATION -> {
                 startButton.setEnabled(false);
                 skipButton.setEnabled(false);
                 terminateButton.setEnabled(true);
                 settingsButton.setEnabled(false);
-                rightPanel.getAddButton().setEnabled(false);
+                if (problem.allowUserBuildings()) rightPanel.getAddButton().setEnabled(false);
             }
             case IN_PROGRESS -> {
                 startButton.setEnabled(false);
                 skipButton.setEnabled(problem.worker().isBinarySearch());
                 terminateButton.setEnabled(true);
                 settingsButton.setEnabled(false);
-                rightPanel.getAddButton().setEnabled(false);
+                if (problem.allowUserBuildings()) rightPanel.getAddButton().setEnabled(false);
             }
         }
     }

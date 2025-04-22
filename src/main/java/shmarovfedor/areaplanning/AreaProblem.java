@@ -64,4 +64,8 @@ public class AreaProblem extends Problem {
     public BackgroundWorker worker() {
         return worker;
     }
+
+    public boolean allowUserBuildings() {
+        return true;
+    }
 }

@@ -75,6 +75,10 @@ public class TownProblem extends Problem {
         return worker;
     }
 
+    public boolean allowUserBuildings() {
+        return false;
+    }
+
     public HouseBuilding houseType() {
         return houseType;
     }

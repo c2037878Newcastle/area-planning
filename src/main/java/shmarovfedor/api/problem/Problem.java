@@ -24,4 +24,6 @@ public abstract class Problem {
 
     public abstract BackgroundWorker worker();
 
+    public abstract boolean allowUserBuildings();
+
 }
