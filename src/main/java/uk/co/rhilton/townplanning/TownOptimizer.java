@@ -8,6 +8,7 @@ import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingPair;
 import shmarovfedor.api.util.Polygon;
 import shmarovfedor.api.solver.Optimizer;
+import uk.co.rhilton.api.persist.DefaultSettings;
 import uk.co.rhilton.townplanning.building.HouseBuilding;
 import uk.co.rhilton.townplanning.building.ShopBuilding;
 
@@ -27,6 +28,8 @@ import static com.gurobi.gurobi.GRB.IntParam.OutputFlag;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.stream;
 import static shmarovfedor.api.util.SolverState.INITIALIZATION;
+import static uk.co.rhilton.api.persist.DefaultSettings.*;
+import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
 
 public class TownOptimizer extends Optimizer {
 
@@ -79,7 +82,7 @@ public class TownOptimizer extends Optimizer {
             // Initialisation of Gurobi Optimiser
             environment = new GRBEnv("mip2.log");
             environment.set(Method, 1);
-            environment.set(TimeLimit, timeLimit);
+            environment.set(TimeLimit, problem().config().valueOf(TIME_LIMIT));
             environment.set(Heuristics, 1);
             environment.set(OutputFlag, 1);
 

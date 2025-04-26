@@ -37,6 +37,7 @@ public class SettingStorage {
 
     public <T> T valueOf(Setting<T> setting) {
         var element = settings().get(setting.id());
+        if (element == null) return setting.getDefault();
         return setting.parse(element);
     }
 
@@ -60,7 +61,7 @@ public class SettingStorage {
         }
     }
 
-    public Optional<SettingStorage> fromFile(Path path) {
+    public static Optional<SettingStorage> fromFile(Path path) {
         try (
                 var reader = new JsonReader(Files.newBufferedReader(path))
         ) {

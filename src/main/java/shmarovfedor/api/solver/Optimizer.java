@@ -25,12 +25,6 @@ public abstract class Optimizer {
         return problem;
     }
 
-    //environment variables
-    /**
-     * The time limit.
-     */
-    protected double timeLimit = 3600;
-
     protected GRBModel model;
     protected GRBEnv environment;
     protected Polygon polygon;
@@ -362,24 +356,6 @@ public abstract class Optimizer {
      */
     public void setCorrectTermination(boolean correctTermination) {
         this.correctTermination = correctTermination;
-    }
-
-    /**
-     * Gets the time limit.
-     *
-     * @return the time limit
-     */
-    public double getTimeLimit() {
-        return timeLimit;
-    }
-
-    /**
-     * Sets the time limit.
-     *
-     * @param timeLimit the new time limit
-     */
-    public void setTimeLimit(double timeLimit) {
-        this.timeLimit = timeLimit;
     }
 
     /**

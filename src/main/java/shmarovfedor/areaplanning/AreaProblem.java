@@ -10,6 +10,9 @@ import shmarovfedor.api.background.BackgroundWorker;
 import shmarovfedor.areaplanning.graphics.AreaFrame;
 import shmarovfedor.areaplanning.solver.AreaOptimizer;
 import shmarovfedor.api.solver.Optimizer;
+import uk.co.rhilton.api.persist.SettingStorage;
+
+import java.nio.file.Path;
 
 import static shmarovfedor.api.util.BuildingType.types;
 
@@ -19,8 +22,13 @@ public class AreaProblem extends Problem {
     private AreaOptimizer optimizer;
     private BackgroundWorker worker;
 
+    private SettingStorage config;
+
     public void initialize() {
+        this.config = new SettingStorage();
+
         optimizer = new AreaOptimizer(this);
+        worker = new BackgroundWorker(this);
 
         frame = new AreaFrame(this);
         frame.setVisible(true);
@@ -68,4 +76,13 @@ public class AreaProblem extends Problem {
     public boolean allowUserBuildings() {
         return true;
     }
+
+    public SettingStorage config() {
+        return config;
+    }
+
+    public void loadConfig(SettingStorage config) {
+        this.config = config;
+    }
+
 }

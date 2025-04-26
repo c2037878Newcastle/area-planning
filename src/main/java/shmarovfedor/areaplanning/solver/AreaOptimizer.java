@@ -8,6 +8,7 @@ import shmarovfedor.api.solver.Optimizer;
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingPair;
 import shmarovfedor.api.util.Polygon;
+import uk.co.rhilton.api.persist.DefaultSettings;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import static com.gurobi.gurobi.GRB.IntParam.OutputFlag;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.stream;
 import static shmarovfedor.api.util.SolverState.INITIALIZATION;
+import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
 
 public class AreaOptimizer extends Optimizer {
 
@@ -67,7 +69,7 @@ public class AreaOptimizer extends Optimizer {
             // Initialisation of Gurobi Optimiser
             environment = new GRBEnv("mip1.log");
             environment.set(Method, 1);
-            environment.set(TimeLimit, timeLimit);
+            environment.set(TimeLimit, problem().config().valueOf(TIME_LIMIT));
             environment.set(Heuristics, 1);
             environment.set(OutputFlag, 1);
 //            environment.set(IntParam.ConcurrentMIP, 24);

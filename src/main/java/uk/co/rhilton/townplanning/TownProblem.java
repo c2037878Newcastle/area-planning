@@ -7,9 +7,12 @@ import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.Polygon;
 import shmarovfedor.api.background.BackgroundWorker;
 import shmarovfedor.api.solver.Optimizer;
+import uk.co.rhilton.api.persist.SettingStorage;
 import uk.co.rhilton.townplanning.building.HouseBuilding;
 import uk.co.rhilton.townplanning.building.ShopBuilding;
 import uk.co.rhilton.townplanning.gui.TownFrame;
+
+import java.nio.file.Path;
 
 import static java.util.Optional.ofNullable;
 import static shmarovfedor.api.util.BuildingType.types;
@@ -23,10 +26,14 @@ public class TownProblem extends Problem {
     private HouseBuilding houseType;
     private ShopBuilding shopType;
 
+    private SettingStorage config;
+
     public void initialize() {
-        // TODO load config
+        config = new SettingStorage();
 
         optimizer = new TownOptimizer(this);
+        worker = new BackgroundWorker(this);
+
         // register custom building types
         houseType = new HouseBuilding();
         shopType = new ShopBuilding();
@@ -79,11 +86,13 @@ public class TownProblem extends Problem {
         return false;
     }
 
-    public HouseBuilding houseType() {
-        return houseType;
+    public SettingStorage config() {
+        return config;
     }
 
-    public ShopBuilding shopType() {
-        return shopType;
+    public void loadConfig(SettingStorage config) {
+        this.config = config;
+
     }
+
 }

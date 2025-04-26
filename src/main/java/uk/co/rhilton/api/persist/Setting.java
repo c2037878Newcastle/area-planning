@@ -3,6 +3,7 @@ package uk.co.rhilton.api.persist;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 public abstract class Setting<T> {
@@ -41,6 +42,18 @@ public abstract class Setting<T> {
             }
 
             public JsonElement save(String value) {
+                return new JsonPrimitive(value);
+            }
+        };
+    }
+
+    public static Setting<Integer> Integer(String id, IntSupplier defaultValue) {
+        return new Setting<>(Integer.class, id, defaultValue::getAsInt) {
+            public Integer parse(JsonElement element) {
+                return element.getAsInt();
+            }
+
+            public JsonElement save(Integer value) {
                 return new JsonPrimitive(value);
             }
         };

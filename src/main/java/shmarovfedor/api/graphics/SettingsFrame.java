@@ -7,6 +7,10 @@ import shmarovfedor.api.background.BackgroundWorker;
 import javax.swing.*;
 import java.awt.*;
 
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
+import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
+
 public class SettingsFrame extends JFrame {
 
     private final Problem problem;
@@ -15,13 +19,14 @@ public class SettingsFrame extends JFrame {
         super();
         this.problem = problem;
         setSize(new Dimension(width, height));
+        setLocationRelativeTo(problem.frame());
         setResizable(false);
 
         JLabel timeLimitLabel = new JLabel("Time limit:");
         JLabel boundLabel = new JLabel("Bound:");
 
         final JTextField timeLimitTextField = new JTextField();
-        timeLimitTextField.setText(String.valueOf(problem.optimizer().getTimeLimit()));
+        timeLimitTextField.setText(problem.config().valueOf(TIME_LIMIT) + "");
         final JTextField boundTextField = new JTextField();
         boundTextField.setText(String.valueOf(SolutionManager.getLowerBound()));
 
@@ -45,13 +50,13 @@ public class SettingsFrame extends JFrame {
 
         confirmButton.addActionListener(e -> {
             try {
-                double timeLimit = Double.parseDouble(timeLimitTextField.getText());
-                double bound = Double.parseDouble(boundTextField.getText());
+                var timeLimit = parseInt(timeLimitTextField.getText());
+                var bound = parseDouble(boundTextField.getText());
 
                 //SolutionManager.setCurrentBound(bound);
                 SolutionManager.setLowerBound(bound);
                 if (timeLimit > 0) {
-                    problem.optimizer().setTimeLimit(timeLimit);
+                    problem.config().save(TIME_LIMIT, timeLimit);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(new JFrame(), "Time limit must be positive");
