@@ -7,6 +7,7 @@ import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.Polygon;
 import shmarovfedor.api.background.BackgroundWorker;
 import shmarovfedor.api.solver.Optimizer;
+import uk.co.rhilton.api.persist.SettingGUI;
 import uk.co.rhilton.api.persist.SettingStorage;
 import uk.co.rhilton.townplanning.building.HouseBuilding;
 import uk.co.rhilton.townplanning.building.ShopBuilding;
@@ -16,6 +17,8 @@ import java.nio.file.Path;
 
 import static java.util.Optional.ofNullable;
 import static shmarovfedor.api.util.BuildingType.types;
+import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
+import static uk.co.rhilton.townplanning.TownSettings.SHOP_DISTANCE;
 
 public class TownProblem extends Problem {
 
@@ -27,6 +30,7 @@ public class TownProblem extends Problem {
     private ShopBuilding shopType;
 
     private SettingStorage config;
+    private SettingGUI settingGUI;
 
     public void initialize() {
         config = new SettingStorage();
@@ -34,9 +38,13 @@ public class TownProblem extends Problem {
         optimizer = new TownOptimizer(this);
         worker = new BackgroundWorker(this);
 
-        // register custom building types
+        // register custom Building types
         houseType = new HouseBuilding();
         shopType = new ShopBuilding();
+
+        settingGUI = new SettingGUI(this);
+        settingGUI.with(TIME_LIMIT, "Time Limit", i -> i > 0);
+        settingGUI.with(SHOP_DISTANCE, "Shop Distance", i -> i > 0);
 
         frame = new TownFrame(this);
         frame.setVisible(true);
@@ -70,8 +78,7 @@ public class TownProblem extends Problem {
     }
 
     public void openSettings() {
-        var settings = new SettingsFrame(this, 200, 200);
-        settings.setVisible(true);
+        settingGUI.fillAndOpen();
     }
 
     public Optimizer optimizer() {

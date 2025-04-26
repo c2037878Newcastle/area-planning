@@ -46,6 +46,11 @@ public class SettingStorage {
         return this;
     }
 
+    public <T> SettingStorage remove(Setting<T> setting) {
+        settings().remove(setting.id());
+        return this;
+    }
+
     public boolean saveToFile(Path path) {
         try (
                 var writer = new JsonWriter(Files.newBufferedWriter(path))
@@ -73,5 +78,4 @@ public class SettingStorage {
             return empty();
         }
     }
-
 }

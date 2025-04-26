@@ -3,6 +3,8 @@ package uk.co.rhilton.api.persist;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
@@ -35,6 +37,10 @@ public abstract class Setting<T> {
 
     public abstract JsonElement save(T value);
 
+    public abstract Component settingField(T currentValue);
+
+    public abstract T fromField(Component c);
+
     public static Setting<String> String(String id, Supplier<String> defaultValue) {
         return new Setting<>(String.class, id, defaultValue) {
             public String parse(JsonElement element) {
@@ -43,6 +49,14 @@ public abstract class Setting<T> {
 
             public JsonElement save(String value) {
                 return new JsonPrimitive(value);
+            }
+
+            public Component settingField(String currentValue) {
+                return new JTextField(currentValue);
+            }
+
+            public String fromField(Component c) {
+                return ((JTextField) c).getText();
             }
         };
     }
@@ -55,6 +69,14 @@ public abstract class Setting<T> {
 
             public JsonElement save(Integer value) {
                 return new JsonPrimitive(value);
+            }
+
+            public Component settingField(Integer currentValue) {
+                return new JTextField(currentValue + "");
+            }
+
+            public Integer fromField(Component c) {
+                return Integer.parseInt(((JTextField) c).getText());
             }
         };
     }
