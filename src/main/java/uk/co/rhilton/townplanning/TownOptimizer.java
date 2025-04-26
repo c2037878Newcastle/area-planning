@@ -30,10 +30,9 @@ import static java.util.Arrays.stream;
 import static shmarovfedor.api.util.SolverState.INITIALIZATION;
 import static uk.co.rhilton.api.persist.DefaultSettings.*;
 import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
+import static uk.co.rhilton.townplanning.TownSettings.SHOP_DISTANCE;
 
 public class TownOptimizer extends Optimizer {
-
-    public static final int maxShopDistance = 60;
 
     public TownOptimizer(Problem problem) {
         super(problem);
@@ -242,6 +241,7 @@ public class TownOptimizer extends Optimizer {
             });
 
 
+            var maxShopDistance = problem().config().valueOf(SHOP_DISTANCE);
             // distance check
             shopHousePairs.forEach(pair ->
                     shopHouseDistance(pair, maxShopDistance, bigM)
