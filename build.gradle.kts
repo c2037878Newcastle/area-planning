@@ -25,6 +25,7 @@ repositories {
 
 dependencies {
     api("com.gurobi:gurobi:12.0.1")
+    api("com.google.code.gson:gson:2.13.1")
 }
 
 application {
