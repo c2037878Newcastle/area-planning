@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.BuildingType;
 import shmarovfedor.areaplanning.building.SimpleBuilding;
 
@@ -21,7 +22,7 @@ import static java.util.Optional.of;
 public class AddBuildingFrame extends JFrame{
 	private Color color = Color.WHITE;
 	
-	public AddBuildingFrame(int width, int height) {
+	public AddBuildingFrame(Problem problem, int width, int height) {
 		super();
 		setSize(new Dimension(width, height));
 		setResizable(false);
@@ -65,7 +66,7 @@ public class AddBuildingFrame extends JFrame{
 
                 if (BuildingType.byID(name).isEmpty()) {
                     try {
-                        new SimpleBuilding(name, width1, height1, benefit, of(color));
+                        new SimpleBuilding(problem, name, width1, height1, benefit, of(color));
                         dispose();
                     } catch(IllegalArgumentException exception) {
                         JOptionPane.showMessageDialog(new JFrame(), exception.getMessage());

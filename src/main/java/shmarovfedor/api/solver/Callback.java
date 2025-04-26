@@ -11,6 +11,8 @@ import shmarovfedor.api.background.BackgroundWorker;
 
 import java.util.ArrayList;
 
+import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
+
 public class Callback extends GRBCallback {
 
     private final Optimizer optimizer;
@@ -60,7 +62,7 @@ public class Callback extends GRBCallback {
                     SolutionManager.add(solution);
                     SolutionManager.setObjective(objective);
                     SolutionManager.setObjectiveUpperBound(objBound);
-                    if (optimizer.problem().worker().isBinarySearch())
+                    if (optimizer.problem().config().valueOf(BINARY_SEARCH))
                         optimizer.problem().optimizer().terminate();
                 }
             }

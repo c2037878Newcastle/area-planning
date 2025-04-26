@@ -17,8 +17,9 @@ import java.nio.file.Path;
 
 import static java.util.Optional.ofNullable;
 import static shmarovfedor.api.util.BuildingType.types;
+import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
 import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
-import static uk.co.rhilton.townplanning.TownSettings.SHOP_DISTANCE;
+import static uk.co.rhilton.townplanning.TownSettings.*;
 
 public class TownProblem extends Problem {
 
@@ -39,15 +40,29 @@ public class TownProblem extends Problem {
         worker = new BackgroundWorker(this);
 
         // register custom Building types
-        houseType = new HouseBuilding();
-        shopType = new ShopBuilding();
+        houseType = new HouseBuilding(this);
+        shopType = new ShopBuilding(this);
 
-        settingGUI = new SettingGUI(this);
-        settingGUI.with(TIME_LIMIT, "Time Limit", i -> i > 0);
-        settingGUI.with(SHOP_DISTANCE, "Shop Distance", i -> i > 0);
+        createSettings();
 
         frame = new TownFrame(this);
         frame.setVisible(true);
+    }
+
+    private void createSettings() {
+        settingGUI = new SettingGUI(this);
+        settingGUI.with(TIME_LIMIT, "Time Limit", i -> i > 0);
+        settingGUI.with(BINARY_SEARCH, "Binary Search", b -> true);
+
+        settingGUI.with(SHOP_DISTANCE, "Shop Distance", i -> i > 0);
+
+        settingGUI.with(HOUSE_WIDTH, "House Width", i -> i > 0);
+        settingGUI.with(HOUSE_HEIGHT, "House Height", i -> i > 0);
+        settingGUI.with(HOUSE_VALUE, "House Value", i -> i > 0);
+
+        settingGUI.with(SHOP_WIDTH, "Shop Width", i -> i > 0);
+        settingGUI.with(SHOP_HEIGHT, "Shop Height", i -> i > 0);
+        settingGUI.with(SHOP_VALUE, "Shop Value", i -> i > 0);
     }
 
     public TownFrame frame() {

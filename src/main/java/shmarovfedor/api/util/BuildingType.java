@@ -1,5 +1,7 @@
 package shmarovfedor.api.util;
 
+import shmarovfedor.api.problem.Problem;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -62,12 +64,18 @@ public abstract class BuildingType {
     // Constructor
     //
 
+    private final Problem problem;
     private final String id;
 
-    protected BuildingType(String id) {
+    protected BuildingType(Problem problem, String id) {
+        this.problem = problem;
         this.id = id;
 
         TYPES.add(this);
+    }
+
+    public Problem problem() {
+        return problem;
     }
 
     public String id() {

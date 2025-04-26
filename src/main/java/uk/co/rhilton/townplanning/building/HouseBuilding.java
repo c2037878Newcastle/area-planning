@@ -1,9 +1,13 @@
 package uk.co.rhilton.townplanning.building;
 
+import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingType;
+import uk.co.rhilton.townplanning.TownSettings;
 
 import java.awt.*;
+
+import static uk.co.rhilton.townplanning.TownSettings.*;
 
 public class HouseBuilding extends BuildingType {
 
@@ -11,8 +15,8 @@ public class HouseBuilding extends BuildingType {
 
     private final Color color;
 
-    public HouseBuilding() {
-        super(HOUSE_ID);
+    public HouseBuilding(Problem problem) {
+        super(problem, HOUSE_ID);
         color = generateRandomColor();
     }
 
@@ -21,15 +25,15 @@ public class HouseBuilding extends BuildingType {
     }
 
     public double width() {
-        return 10;
+        return problem().config().valueOf(HOUSE_WIDTH);
     }
 
     public double height() {
-        return 10;
+        return problem().config().valueOf(HOUSE_HEIGHT);
     }
 
     public double benefit() {
-        return 1000;
+        return problem().config().valueOf(HOUSE_VALUE);
     }
 
     public Building createInstance() {

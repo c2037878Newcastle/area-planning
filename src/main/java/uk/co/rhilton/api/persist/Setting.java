@@ -5,6 +5,7 @@ import com.google.gson.JsonPrimitive;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
@@ -77,6 +78,26 @@ public abstract class Setting<T> {
 
             public Integer fromField(Component c) {
                 return Integer.parseInt(((JTextField) c).getText());
+            }
+        };
+    }
+
+    public static Setting<Boolean> Boolean(String id, BooleanSupplier defaultValue) {
+        return new Setting<>(Boolean.class, id, defaultValue::getAsBoolean) {
+            public Boolean parse(JsonElement element) {
+                return element.getAsBoolean();
+            }
+
+            public JsonElement save(Boolean value) {
+                return new JsonPrimitive(value);
+            }
+
+            public Component settingField(Boolean currentValue) {
+                return new JCheckBox("", currentValue);
+            }
+
+            public Boolean fromField(Component c) {
+                return ((JCheckBox) c).isSelected();
             }
         };
     }

@@ -1,5 +1,6 @@
 package shmarovfedor.areaplanning.building;
 
+import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingType;
 
@@ -12,8 +13,8 @@ public class SimpleBuilding extends BuildingType {
     private final double benefit;
     private final Color color;
 
-    public SimpleBuilding(String id, double width, double height, double benefit, Optional<Color> color) {
-        super(id);
+    public SimpleBuilding(Problem problem, String id, double width, double height, double benefit, Optional<Color> color) {
+        super(problem, id);
         this.width = width;
         this.height = height;
         this.benefit = benefit;

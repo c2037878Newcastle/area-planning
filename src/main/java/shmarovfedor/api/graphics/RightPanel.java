@@ -44,7 +44,7 @@ public class RightPanel extends JPanel {
             addButton = new JButton("Add");
             add(addButton, BorderLayout.SOUTH);
             addButton.addActionListener(e -> {
-                AddBuildingFrame addBuildingFrame = new AddBuildingFrame(200, 200);
+                AddBuildingFrame addBuildingFrame = new AddBuildingFrame(problem, 200, 200);
                 addBuildingFrame.setVisible(true);
             });
         }

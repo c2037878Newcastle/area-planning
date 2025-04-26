@@ -6,6 +6,8 @@ import shmarovfedor.api.util.BuildingType;
 
 import javax.swing.*;
 
+import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
+
 // TODO: Auto-generated Javadoc
 
 /**
@@ -19,23 +21,13 @@ public class BackgroundWorker extends SwingWorker<Void, Void> {
         this.problem = problem;
     }
 
-    private boolean binarySearch = true;
-
-    public boolean isBinarySearch() {
-        return binarySearch;
-    }
-
-    public void setBinarySearch(boolean binarySearch) {
-        this.binarySearch = binarySearch;
-    }
-
     /* (non-Javadoc)
      * @see javax.swing.SwingWorker#doInBackground()
      */
     @Override
     protected Void doInBackground() throws Exception {
         problem.optimizer().setModel();
-        if (binarySearch) {
+        if (problem.config().valueOf(BINARY_SEARCH)) {
             problem.optimizer().optimize();
             double lowerBound = SolutionManager.getLowerBound();
             double upperBound = SolutionManager.getObjectiveUpperBound();

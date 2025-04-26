@@ -9,6 +9,7 @@ import java.awt.*;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
+import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
 import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
 
 public class SettingsFrame extends JFrame {
@@ -32,7 +33,7 @@ public class SettingsFrame extends JFrame {
 
         JButton confirmButton = new JButton("Confirm");
 
-        JCheckBox binarySearch = new JCheckBox("Binary", problem.worker().isBinarySearch());
+        JCheckBox binarySearch = new JCheckBox("Binary", problem.config().valueOf(BINARY_SEARCH));
 
 
         setLayout(new GridLayout(4, 2));
@@ -46,7 +47,12 @@ public class SettingsFrame extends JFrame {
         getContentPane().add(new JLabel());
         getContentPane().add(confirmButton);
 
-        binarySearch.addActionListener(e -> problem.worker().setBinarySearch(!problem.worker().isBinarySearch()));
+        binarySearch.addActionListener(e ->
+                problem.config().save(
+                        BINARY_SEARCH,
+                        !problem.config().valueOf(BINARY_SEARCH)
+                )
+        );
 
         confirmButton.addActionListener(e -> {
             try {

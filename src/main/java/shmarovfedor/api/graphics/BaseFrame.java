@@ -16,6 +16,7 @@ import shmarovfedor.api.background.BackgroundWorker;
 import uk.co.rhilton.api.persist.SettingStorage;
 
 import static java.lang.System.currentTimeMillis;
+import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
 
 public abstract class BaseFrame extends JFrame {
 
@@ -156,7 +157,7 @@ public abstract class BaseFrame extends JFrame {
             }
             case IN_PROGRESS -> {
                 startButton.setEnabled(false);
-                skipButton.setEnabled(problem.worker().isBinarySearch());
+                skipButton.setEnabled(problem.config().valueOf(BINARY_SEARCH));
                 terminateButton.setEnabled(true);
                 settingsButton.setEnabled(false);
                 if (problem.allowUserBuildings()) rightPanel.getAddButton().setEnabled(false);
