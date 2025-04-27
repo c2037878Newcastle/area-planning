@@ -4,7 +4,9 @@ import shmarovfedor.api.problem.Problem;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -12,7 +14,7 @@ import java.util.function.Predicate;
 public class SettingGUI {
 
     private final Problem problem;
-    private final Set<Entry<?>> entries = new HashSet<>();
+    private final List<Entry<?>> entries = new ArrayList<>();
 
     public SettingGUI(Problem problem) {
         this.problem = problem;
