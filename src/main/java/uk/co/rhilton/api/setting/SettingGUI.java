@@ -80,11 +80,20 @@ public class SettingGUI {
         }
 
         public boolean isInvalid() {
-            return !validityCheck.test(setting.fromField(component));
+            try {
+                return !validityCheck.test(setting.fromField(component));
+            } catch (IllegalArgumentException e) {
+                return true;
+            }
         }
 
         public void apply(SettingStorage config) {
-            config.save(setting, setting.fromField(component));
+            try {
+                var value = setting.fromField(component);
+                config.save(setting, value);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Field contained invalid data for " + setting);
+            }
         }
 
         public void reset(SettingStorage config) {

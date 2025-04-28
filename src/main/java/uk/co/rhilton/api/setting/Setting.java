@@ -40,7 +40,7 @@ public abstract class Setting<T> {
 
     public abstract Component settingField(T currentValue);
 
-    public abstract T fromField(Component c);
+    public abstract T fromField(Component c) throws IllegalArgumentException;
 
     public static Setting<String> String(String id, Supplier<String> defaultValue) {
         return new Setting<>(String.class, id, defaultValue) {
