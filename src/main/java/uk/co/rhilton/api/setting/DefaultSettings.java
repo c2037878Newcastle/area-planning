@@ -1,4 +1,4 @@
-package uk.co.rhilton.api.persist;
+package uk.co.rhilton.api.setting;
 
 public class DefaultSettings {
 

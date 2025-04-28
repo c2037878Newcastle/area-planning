@@ -6,17 +6,17 @@ import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.Polygon;
 import shmarovfedor.api.background.BackgroundWorker;
 import shmarovfedor.api.solver.Optimizer;
-import uk.co.rhilton.api.persist.SettingGUI;
-import uk.co.rhilton.api.persist.SettingStorage;
+import uk.co.rhilton.api.setting.SettingGUI;
+import uk.co.rhilton.api.setting.SettingStorage;
 import uk.co.rhilton.townplanning.building.HouseBuilding;
 import uk.co.rhilton.townplanning.building.ShopBuilding;
 import uk.co.rhilton.townplanning.graphics.TownFrame;
 import uk.co.rhilton.townplanning.solver.TownOptimizer;
 
 import static shmarovfedor.api.util.BuildingType.types;
-import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
-import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
-import static uk.co.rhilton.townplanning.persist.TownSettings.*;
+import static uk.co.rhilton.api.setting.DefaultSettings.BINARY_SEARCH;
+import static uk.co.rhilton.api.setting.DefaultSettings.TIME_LIMIT;
+import static uk.co.rhilton.townplanning.setting.TownSettings.*;
 
 public class TownProblem extends Problem {
 

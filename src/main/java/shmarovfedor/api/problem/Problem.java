@@ -3,7 +3,7 @@ package shmarovfedor.api.problem;
 import shmarovfedor.api.graphics.BaseFrame;
 import shmarovfedor.api.background.BackgroundWorker;
 import shmarovfedor.api.solver.Optimizer;
-import uk.co.rhilton.api.persist.SettingStorage;
+import uk.co.rhilton.api.setting.SettingStorage;
 
 import java.nio.file.Path;
 

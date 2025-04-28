@@ -6,7 +6,7 @@ import shmarovfedor.api.util.BuildingType;
 
 import javax.swing.*;
 
-import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
+import static uk.co.rhilton.api.setting.DefaultSettings.BINARY_SEARCH;
 
 // TODO: Auto-generated Javadoc
 

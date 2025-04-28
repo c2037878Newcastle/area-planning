@@ -1,12 +1,9 @@
-package uk.co.rhilton.api.persist;
+package uk.co.rhilton.api.setting;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

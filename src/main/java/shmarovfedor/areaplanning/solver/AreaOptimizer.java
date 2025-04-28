@@ -8,7 +8,6 @@ import shmarovfedor.api.solver.Optimizer;
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingPair;
 import shmarovfedor.api.util.Polygon;
-import uk.co.rhilton.api.persist.DefaultSettings;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +23,7 @@ import static com.gurobi.gurobi.GRB.IntParam.OutputFlag;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.stream;
 import static shmarovfedor.api.util.SolverState.INITIALIZATION;
-import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
+import static uk.co.rhilton.api.setting.DefaultSettings.TIME_LIMIT;
 
 public class AreaOptimizer extends Optimizer {
 

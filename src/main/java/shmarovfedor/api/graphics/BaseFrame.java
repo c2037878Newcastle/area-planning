@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
-import java.io.FileFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -12,11 +11,10 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import shmarovfedor.api.problem.Problem;
-import shmarovfedor.api.background.BackgroundWorker;
-import uk.co.rhilton.api.persist.SettingStorage;
+import uk.co.rhilton.api.setting.SettingStorage;
 
 import static java.lang.System.currentTimeMillis;
-import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
+import static uk.co.rhilton.api.setting.DefaultSettings.BINARY_SEARCH;
 
 public abstract class BaseFrame extends JFrame {
 

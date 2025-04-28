@@ -1,14 +1,12 @@
-package uk.co.rhilton.api.persist;
+package uk.co.rhilton.api.setting;
 
 import shmarovfedor.api.problem.Problem;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public class SettingGUI {

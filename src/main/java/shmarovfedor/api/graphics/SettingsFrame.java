@@ -2,15 +2,14 @@ package shmarovfedor.api.graphics;
 
 import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.problem.Problem;
-import shmarovfedor.api.background.BackgroundWorker;
 
 import javax.swing.*;
 import java.awt.*;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
-import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
-import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
+import static uk.co.rhilton.api.setting.DefaultSettings.BINARY_SEARCH;
+import static uk.co.rhilton.api.setting.DefaultSettings.TIME_LIMIT;
 
 public class SettingsFrame extends JFrame {
 

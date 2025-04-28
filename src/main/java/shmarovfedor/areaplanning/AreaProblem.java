@@ -10,9 +10,7 @@ import shmarovfedor.api.background.BackgroundWorker;
 import shmarovfedor.areaplanning.graphics.AreaFrame;
 import shmarovfedor.areaplanning.solver.AreaOptimizer;
 import shmarovfedor.api.solver.Optimizer;
-import uk.co.rhilton.api.persist.SettingStorage;
-
-import java.nio.file.Path;
+import uk.co.rhilton.api.setting.SettingStorage;
 
 import static shmarovfedor.api.util.BuildingType.types;
 

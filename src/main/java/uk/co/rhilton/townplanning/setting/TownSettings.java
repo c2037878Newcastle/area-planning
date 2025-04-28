@@ -1,6 +1,6 @@
-package uk.co.rhilton.townplanning.persist;
+package uk.co.rhilton.townplanning.setting;
 
-import uk.co.rhilton.api.persist.Setting;
+import uk.co.rhilton.api.setting.Setting;
 
 public class TownSettings {
 

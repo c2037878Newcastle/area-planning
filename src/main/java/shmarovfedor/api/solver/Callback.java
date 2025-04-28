@@ -7,11 +7,10 @@ import com.gurobi.gurobi.GRBVar;
 import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.util.BuildingType;
 import shmarovfedor.api.util.SolutionBuilding;
-import shmarovfedor.api.background.BackgroundWorker;
 
 import java.util.ArrayList;
 
-import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
+import static uk.co.rhilton.api.setting.DefaultSettings.BINARY_SEARCH;
 
 public class Callback extends GRBCallback {
 
