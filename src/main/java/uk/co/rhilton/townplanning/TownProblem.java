@@ -1,6 +1,5 @@
 package uk.co.rhilton.townplanning;
 
-import shmarovfedor.api.graphics.SettingsFrame;
 import shmarovfedor.api.model.RegionManager;
 import shmarovfedor.api.model.SolutionManager;
 import shmarovfedor.api.problem.Problem;
@@ -11,15 +10,13 @@ import uk.co.rhilton.api.persist.SettingGUI;
 import uk.co.rhilton.api.persist.SettingStorage;
 import uk.co.rhilton.townplanning.building.HouseBuilding;
 import uk.co.rhilton.townplanning.building.ShopBuilding;
-import uk.co.rhilton.townplanning.gui.TownFrame;
+import uk.co.rhilton.townplanning.graphics.TownFrame;
+import uk.co.rhilton.townplanning.solver.TownOptimizer;
 
-import java.nio.file.Path;
-
-import static java.util.Optional.ofNullable;
 import static shmarovfedor.api.util.BuildingType.types;
 import static uk.co.rhilton.api.persist.DefaultSettings.BINARY_SEARCH;
 import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
-import static uk.co.rhilton.townplanning.TownSettings.*;
+import static uk.co.rhilton.townplanning.persist.TownSettings.*;
 
 public class TownProblem extends Problem {
 

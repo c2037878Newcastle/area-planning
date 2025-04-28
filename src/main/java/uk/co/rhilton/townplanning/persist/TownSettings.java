@@ -1,4 +1,4 @@
-package uk.co.rhilton.townplanning;
+package uk.co.rhilton.townplanning.persist;
 
 import uk.co.rhilton.api.persist.Setting;
 

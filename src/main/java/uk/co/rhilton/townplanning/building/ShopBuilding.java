@@ -6,7 +6,7 @@ import shmarovfedor.api.util.BuildingType;
 
 import java.awt.*;
 
-import static uk.co.rhilton.townplanning.TownSettings.*;
+import static uk.co.rhilton.townplanning.persist.TownSettings.*;
 
 public class ShopBuilding extends BuildingType {
 

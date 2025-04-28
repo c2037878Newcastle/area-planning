@@ -1,7 +1,6 @@
-package uk.co.rhilton.townplanning.gui;
+package uk.co.rhilton.townplanning.graphics;
 
 import shmarovfedor.api.graphics.BaseFrame;
-import shmarovfedor.api.problem.Problem;
 import uk.co.rhilton.townplanning.TownProblem;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package uk.co.rhilton.townplanning;
+package uk.co.rhilton.townplanning.util;
 
 import com.gurobi.gurobi.GRBVar;
 import shmarovfedor.api.util.Building;

@@ -1,4 +1,4 @@
-package uk.co.rhilton.townplanning;
+package uk.co.rhilton.townplanning.solver;
 
 import com.gurobi.gurobi.*;
 import shmarovfedor.api.model.RegionManager;
@@ -8,9 +8,10 @@ import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingPair;
 import shmarovfedor.api.util.Polygon;
 import shmarovfedor.api.solver.Optimizer;
-import uk.co.rhilton.api.persist.DefaultSettings;
+import uk.co.rhilton.townplanning.TownProblem;
 import uk.co.rhilton.townplanning.building.HouseBuilding;
 import uk.co.rhilton.townplanning.building.ShopBuilding;
+import uk.co.rhilton.townplanning.util.ShopHousePair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,15 +23,13 @@ import java.util.stream.Collectors;
 import static com.gurobi.gurobi.GRB.*;
 import static com.gurobi.gurobi.GRB.DoubleParam.Heuristics;
 import static com.gurobi.gurobi.GRB.DoubleParam.TimeLimit;
-import static com.gurobi.gurobi.GRB.IntParam.*;
 import static com.gurobi.gurobi.GRB.IntParam.Method;
 import static com.gurobi.gurobi.GRB.IntParam.OutputFlag;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.stream;
 import static shmarovfedor.api.util.SolverState.INITIALIZATION;
-import static uk.co.rhilton.api.persist.DefaultSettings.*;
 import static uk.co.rhilton.api.persist.DefaultSettings.TIME_LIMIT;
-import static uk.co.rhilton.townplanning.TownSettings.SHOP_DISTANCE;
+import static uk.co.rhilton.townplanning.persist.TownSettings.SHOP_DISTANCE;
 
 public class TownOptimizer extends Optimizer {
 

@@ -3,11 +3,10 @@ package uk.co.rhilton.townplanning.building;
 import shmarovfedor.api.problem.Problem;
 import shmarovfedor.api.util.Building;
 import shmarovfedor.api.util.BuildingType;
-import uk.co.rhilton.townplanning.TownSettings;
 
 import java.awt.*;
 
-import static uk.co.rhilton.townplanning.TownSettings.*;
+import static uk.co.rhilton.townplanning.persist.TownSettings.*;
 
 public class HouseBuilding extends BuildingType {
 
