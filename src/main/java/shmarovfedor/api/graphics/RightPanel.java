@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 
 public class RightPanel extends JPanel {
 
-    private ProgressPanel progressPanel;
-    private BuildingPanel buildingPanel;
+    public ProgressPanel progressPanel;
+    public BuildingPanel buildingPanel;
     private JButton addButton;
 
     public JButton getAddButton() {
@@ -24,14 +24,14 @@ public class RightPanel extends JPanel {
     private int width;
     private int height;
 
-    public RightPanel(Problem problem, int width, int height) {
+    public RightPanel(BaseFrame base, int width, int height) {
         super();
         this.width = width;
         this.height = height;
 
         setPreferredSize(new Dimension(width, height));
 
-        progressPanel = new ProgressPanel(problem, width, 140);
+        progressPanel = new ProgressPanel(base, width, 160);
         buildingPanel = new BuildingPanel(width, height);
 
 
@@ -40,11 +40,11 @@ public class RightPanel extends JPanel {
         add(progressPanel, BorderLayout.NORTH);
         add(buildingPanel, BorderLayout.CENTER);
 
-        if (problem.allowUserBuildings()) {
+        if (base.problem.allowUserBuildings()) {
             addButton = new JButton("Add");
             add(addButton, BorderLayout.SOUTH);
             addButton.addActionListener(e -> {
-                AddBuildingFrame addBuildingFrame = new AddBuildingFrame(problem, 200, 200);
+                AddBuildingFrame addBuildingFrame = new AddBuildingFrame(base.problem, 200, 200);
                 addBuildingFrame.setVisible(true);
             });
         }

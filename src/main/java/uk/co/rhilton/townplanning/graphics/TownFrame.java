@@ -1,9 +1,11 @@
 package uk.co.rhilton.townplanning.graphics;
 
 import shmarovfedor.api.graphics.BaseFrame;
+import shmarovfedor.api.model.SolutionManager;
 import uk.co.rhilton.townplanning.TownProblem;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class TownFrame extends BaseFrame {
 
@@ -29,5 +31,15 @@ public class TownFrame extends BaseFrame {
         });
         townBar.add(disclaimer);
         menu.add(townBar);
+
+        var button = new JButton("Reset Bound");
+        button.addActionListener(e -> {
+            SolutionManager.setLowerBound(0);
+        });
+        rightPanel.progressPanel.add(button, BorderLayout.SOUTH);
+    }
+
+    public void paintProgressPanel(Graphics g) {
+        super.paintProgressPanel(g);
     }
 }

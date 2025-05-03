@@ -1,8 +1,6 @@
 package shmarovfedor.api.graphics;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.JPanel;
 
@@ -20,14 +18,15 @@ public class ProgressPanel extends JPanel{
 	private int width;
 	private int height;
 
-	private final Problem problem;
+	private final BaseFrame base;
 	
-	public ProgressPanel(Problem problem, int width, int height) {
-		this.problem = problem;
+	public ProgressPanel(BaseFrame base, int width, int height) {
+		this.base = base;
 		this.width = width;
 		this.height = height;
 		setPreferredSize(new Dimension(width, height));
 		setBackground(Color.WHITE);
+		setLayout(new BorderLayout());
 	}
 
 	public void drawBorder(Graphics g) {
@@ -48,6 +47,7 @@ public class ProgressPanel extends JPanel{
 		drawUpperBound(g);
 		drawSolutionAmount(g);
 		drawStatus(g);
+		base.paintProgressPanel(g);
 		repaint();
 	}
 	
@@ -80,7 +80,7 @@ public class ProgressPanel extends JPanel{
 		g.setColor(Color.BLACK);
 		
 		
-		String status = problem
+		String status = base.problem
 				.optimizer()
 				.getStatus()
 				.name();

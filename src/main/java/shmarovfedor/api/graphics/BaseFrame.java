@@ -1,8 +1,6 @@
 package shmarovfedor.api.graphics;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,7 +49,7 @@ public abstract class BaseFrame extends JFrame {
         settingsButton = new JButton("Settings");
 
         mainPanel = new MainPanel();
-        rightPanel = new RightPanel(problem,300, 500);
+        rightPanel = new RightPanel(this,300, 500);
 
         saveButton.addActionListener(e ->
                 mainPanel.saveToFile(String.valueOf(currentTimeMillis()))
@@ -161,5 +159,9 @@ public abstract class BaseFrame extends JFrame {
                 if (problem.allowUserBuildings()) rightPanel.getAddButton().setEnabled(false);
             }
         }
+    }
+
+    public void paintProgressPanel(Graphics g) {
+
     }
 }
