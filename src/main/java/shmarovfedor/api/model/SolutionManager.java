@@ -33,8 +33,10 @@ public class SolutionManager {
 	private static double lowerBound = 0;
 	
 	private static double objectiveUpperBound;
-	
+
 	private static double currentBound;
+
+	private static int pass = 0;
 	
 	public static void clear() {
 		solutions = new ArrayList<>();
@@ -146,4 +148,15 @@ public class SolutionManager {
 		SolutionManager.currentBound = currentBound;
 	}
 
+	public static void incrementPass() {
+		pass++;
+	}
+
+	public static int getPassCount() {
+		return pass;
+	}
+
+	public static void resetPass() {
+		pass = 0;
+	}
 }

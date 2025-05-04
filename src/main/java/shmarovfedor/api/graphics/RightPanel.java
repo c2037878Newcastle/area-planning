@@ -31,7 +31,7 @@ public class RightPanel extends JPanel {
 
         setPreferredSize(new Dimension(width, height));
 
-        progressPanel = new ProgressPanel(base, width, 160);
+        progressPanel = new ProgressPanel(base, width, 180);
         buildingPanel = new BuildingPanel(width, height);
 
 

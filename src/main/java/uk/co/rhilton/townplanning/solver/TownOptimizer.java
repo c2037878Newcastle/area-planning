@@ -96,7 +96,7 @@ public class TownOptimizer extends Optimizer {
                     .flatMap(Collection::stream)
                     .forEach(building -> {
                                 building.setGlobalIndex(atK.getAndIncrement());
-                                building.setExcludedVariable(included[building.globalIndex()]);
+                                building.setIncludedVariable(included[building.globalIndex()]);
                             }
                     );
 
@@ -107,28 +107,9 @@ public class TownOptimizer extends Optimizer {
                     .stream()
                     .flatMap(Collection::stream)
                     .forEach(building ->
-                            objective.addTerm(building.benefit(), building.excluded())
+                            objective.addTerm(building.benefit(), building.included())
                     );
             model.setObjective(objective, MAXIMIZE);
-
-//			/*
-//			Breaking Symmetry - reduces search time by eliminating symmetric parts of a search space e.g. 011, 101 110
-//			 */
-//            buildings
-//                    .keySet()
-//                    .stream()
-//                    .map(type -> {
-//                        var list = buildings.get(type);
-//                        var pairs = new ArrayList<BuildingPair>();
-//                        for (var i = 0; i < list.size() - 1; i++) {
-//                            var first = list.get(i);
-//                            var second = list.get(i + 1);
-//                            pairs.add(new BuildingPair(first, second));
-//                        }
-//                        return pairs;
-//                    })
-//                    .flatMap(Collection::stream)
-//                    .forEach(this::breakSymmetry);
 
             var x = model.addVars(totalMax, CONTINUOUS);
             var y = model.addVars(totalMax, CONTINUOUS);
@@ -246,113 +227,63 @@ public class TownOptimizer extends Optimizer {
                     shopHouseDistance(pair, maxShopDistance, bigM)
             );
 
-            shops.forEach(shop -> {
-                try {
-                    var shopIncludes =
-                            shopHousePairs.stream()
-                                    .filter(pair -> pair.shop().equals(shop))
-                                    .map(ShopHousePair::excluded)
-                                    .collect(Collectors.toSet());
-
-                    // ensure shop has at least one building
-                    var z = model.addVars(1, BINARY)[0];
-                    model.update();
-
-                    var expr = new GRBLinExpr();
-                    expr.addTerm(bigM, z);
-                    shopIncludes.forEach(i -> expr.addTerm(1, i));
-                    model.addConstr(expr, GREATER_EQUAL, 1, null);
-
-                    var includeCheck = new GRBLinExpr();
-                    includeCheck.addTerm(1, z);
-                    includeCheck.addTerm(1, shop.excluded());
-                    model.addConstr(includeCheck, LESS_EQUAL, 1, null);
-                } catch (GRBException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-            houses.forEach(house -> {
-                try {
-                    var houseIncludes =
-                            shopHousePairs.stream()
-                                    .filter(pair -> pair.house().equals(house))
-                                    .map(ShopHousePair::excluded)
-                                    .collect(Collectors.toSet());
-
-                    var z = model.addVars(1, BINARY)[0];
-                    model.update();
-
-                    // ensure house has at least one shop
-                    var expr = new GRBLinExpr();
-                    expr.addTerm(bigM, z);
-                    houseIncludes.forEach(i -> expr.addTerm(1, i));
-                    model.addConstr(expr, GREATER_EQUAL, 1, null);
-
-                    var includeCheck = new GRBLinExpr();
-                    includeCheck.addTerm(1, z);
-                    includeCheck.addTerm(1, house.excluded());
-                    model.addConstr(includeCheck, LESS_EQUAL, 1, null);
-
-                } catch (GRBException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
             // at least one shop in solution
             var shopExpr = new GRBLinExpr();
-            shops.forEach(shop -> shopExpr.addTerm(1, shop.excluded()));
+            shops.forEach(shop -> shopExpr.addTerm(1, shop.included()));
             model.addConstr(shopExpr, GREATER_EQUAL, 1, null);
 
             // at least one house in solution
             var houseExpr = new GRBLinExpr();
-            houses.forEach(house -> houseExpr.addTerm(1, house.excluded()));
+            houses.forEach(house -> houseExpr.addTerm(1, house.included()));
             model.addConstr(houseExpr, GREATER_EQUAL, 1, null);
 
+            var zCount = new AtomicInteger(0);
+            var shopsZ = model.addVars(shops.size(), BINARY);
+            model.update();
             shops.forEach(shop -> {
                 try {
-                    var shopIncludes =
+                    var shopExcludes =
                             shopHousePairs.stream()
                                     .filter(pair -> pair.shop().equals(shop))
                                     .map(ShopHousePair::excluded)
                                     .collect(Collectors.toSet());
 
-                    var z = model.addVars(1, BINARY)[0];
-                    model.update();
 
+                    var z = shopsZ[zCount.getAndIncrement()];
                     var expr = new GRBLinExpr();
-                    expr.addTerm(bigM, z);
-                    shopIncludes.forEach(val -> expr.addTerm(1, val));
-                    model.addConstr(expr, GREATER_EQUAL, 1, null);
+                    expr.addTerm(-bigM, z);
+                    shopExcludes.forEach(val -> expr.addTerm(1, val));
+                    model.addConstr(expr, LESS_EQUAL, shopExcludes.size() + 1, null);
 
                     var includeCheck = new GRBLinExpr();
                     expr.addTerm(1, z);
-                    expr.addTerm(1, shop.excluded());
+                    expr.addTerm(1, shop.included());
                     model.addConstr(includeCheck, LESS_EQUAL, 1, null);
                 } catch (GRBException e) {
                     throw new RuntimeException(e);
                 }
             });
 
+            zCount.set(0);
+            var houseZ = model.addVars(houses.size(), BINARY);
+            model.update();
             houses.forEach(house -> {
                 try {
-                    var houseIncludes =
+                    var houseExcludes =
                             shopHousePairs.stream()
                                     .filter(pair -> pair.house().equals(house))
                                     .map(ShopHousePair::excluded)
                                     .collect(Collectors.toSet());
 
-                    var z = model.addVars(1, BINARY)[0];
-                    model.update();
-
+                    var z = houseZ[zCount.getAndIncrement()];
                     var expr = new GRBLinExpr();
-                    expr.addTerm(bigM, z);
-                    houseIncludes.forEach(val -> expr.addTerm(1, val));
-                    model.addConstr(expr, GREATER_EQUAL, 1, null);
+                    expr.addTerm(-bigM, z);
+                    houseExcludes.forEach(val -> expr.addTerm(1, val));
+                    model.addConstr(expr, LESS_EQUAL, houseExcludes.size() + 1, null);
 
                     var includeCheck = new GRBLinExpr();
                     expr.addTerm(1, z);
-                    expr.addTerm(1, house.excluded());
+                    expr.addTerm(1, house.included());
                     model.addConstr(includeCheck, LESS_EQUAL, 1, null);
 
                 } catch (GRBException e) {
@@ -412,10 +343,10 @@ public class TownOptimizer extends Optimizer {
             model.addConstr(expr, LESS_EQUAL, distance, null);
 
             expr = new GRBLinExpr();
-            expr.addTerm(1, house.excluded());
-            expr.addTerm(1, shop.excluded());
-            expr.addTerm(-bigM, pair.excluded());
-            model.addConstr(expr, LESS_EQUAL, 0, null);
+            expr.addTerm(1, house.included());
+            expr.addTerm(1, shop.included());
+            expr.addTerm(bigM, pair.excluded());
+            model.addConstr(expr, GREATER_EQUAL, 2, null);
         } catch (GRBException e) {
             throw new RuntimeException(e);
         }

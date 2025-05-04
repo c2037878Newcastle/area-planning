@@ -32,9 +32,12 @@ public class TownFrame extends BaseFrame {
         townBar.add(disclaimer);
         menu.add(townBar);
 
-        var button = new JButton("Reset Bound");
+        var button = new JButton("Reset Bounds");
         button.addActionListener(e -> {
             SolutionManager.setLowerBound(0);
+            SolutionManager.setCurrentBound(0);
+            SolutionManager.setUpperBound(0);
+            SolutionManager.setObjective(0);
         });
         rightPanel.progressPanel.add(button, BorderLayout.SOUTH);
     }

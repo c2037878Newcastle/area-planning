@@ -104,29 +104,29 @@ public abstract class Optimizer {
             expr.addTerm(1.0, pair.first().xVar());
             expr.addTerm(-1.0, pair.second().xVar());
             expr.addTerm(-bigM, toggles[0]);
-            expr.addTerm(bigM, pair.first().excluded());
-            expr.addTerm(bigM, pair.second().excluded());
+            expr.addTerm(bigM, pair.first().included());
+            expr.addTerm(bigM, pair.second().included());
             model.addConstr(expr, GRB.LESS_EQUAL, 2 * bigM - (pair.first().width() + pair.second().width()) / 2, null);
             expr = new GRBLinExpr();
             expr.addTerm(-1.0, pair.first().xVar());
             expr.addTerm(1.0, pair.second().xVar());
             expr.addTerm(-bigM, toggles[1]);
-            expr.addTerm(bigM, pair.first().excluded());
-            expr.addTerm(bigM, pair.second().excluded());
+            expr.addTerm(bigM, pair.first().included());
+            expr.addTerm(bigM, pair.second().included());
             model.addConstr(expr, GRB.LESS_EQUAL, 2 * bigM - (pair.first().width() + pair.second().width()) / 2, null);
             expr = new GRBLinExpr();
             expr.addTerm(1.0, pair.first().yVar());
             expr.addTerm(-1.0, pair.second().yVar());
             expr.addTerm(-bigM, toggles[2]);
-            expr.addTerm(bigM, pair.first().excluded());
-            expr.addTerm(bigM, pair.second().excluded());
+            expr.addTerm(bigM, pair.first().included());
+            expr.addTerm(bigM, pair.second().included());
             model.addConstr(expr, GRB.LESS_EQUAL, 2 * bigM - (pair.first().height() + pair.second().height()) / 2, null);
             expr = new GRBLinExpr();
             expr.addTerm(-1.0, pair.first().yVar());
             expr.addTerm(1.0, pair.second().yVar());
             expr.addTerm(-bigM, toggles[3]);
-            expr.addTerm(bigM, pair.first().excluded());
-            expr.addTerm(bigM, pair.second().excluded());
+            expr.addTerm(bigM, pair.first().included());
+            expr.addTerm(bigM, pair.second().included());
             model.addConstr(expr, GRB.LESS_EQUAL, 2 * bigM - (pair.first().height() + pair.second().height()) / 2, null);
             expr = new GRBLinExpr();
             expr.addTerm(1.0, toggles[0]);
@@ -142,8 +142,8 @@ public abstract class Optimizer {
     public void breakSymmetry(BuildingPair pair) {
         try {
             var expr = new GRBLinExpr();
-            expr.addTerm(-1.0, pair.first().excluded());
-            expr.addTerm(1.0, pair.second().excluded());
+            expr.addTerm(-1.0, pair.first().included());
+            expr.addTerm(1.0, pair.second().included());
             model.addConstr(expr, GRB.LESS_EQUAL, 0, null);
         } catch (GRBException e) {
             throw new RuntimeException(e);
@@ -168,7 +168,7 @@ public abstract class Optimizer {
         var expr = new GRBLinExpr();
         expr.addTerm(a[vertex], building.xVar());
         expr.addTerm(b[vertex], building.yVar());
-        expr.addTerm(M, building.excluded());
+        expr.addTerm(M, building.included());
 
         try {
             model.addConstr(expr, GRB.LESS_EQUAL, M + minD, null);
@@ -198,7 +198,7 @@ public abstract class Optimizer {
         var expr = new GRBLinExpr();
         expr.addTerm(a[vertex], building.xVar());
         expr.addTerm(b[vertex], building.yVar());
-        expr.addTerm(M2, building.excluded());
+        expr.addTerm(M2, building.included());
         expr.addTerm(M3, e);
         model.addConstr(expr, GRB.GREATER_EQUAL, M2 + maxD, null);
 
@@ -267,7 +267,7 @@ public abstract class Optimizer {
     public void terminateExecution() {
         setStatus(TERMINATED);
         setExecutionTermination(true);
-        model.terminate();
+        if (model != null) model.terminate();
     }
 
     /**
@@ -275,7 +275,7 @@ public abstract class Optimizer {
      */
     public void terminate() {
         setCorrectTermination(true);
-        model.terminate();
+        if (model != null) model.terminate();
     }
 
     /**
@@ -307,7 +307,7 @@ public abstract class Optimizer {
                     .stream()
                     .flatMap(Collection::stream)
                     .forEach(b ->
-                            expr.addTerm(b.benefit(), b.excluded())
+                            expr.addTerm(b.benefit(), b.included())
                     );
             lowerBoundConstraint = model.addConstr(expr, GRB.GREATER_EQUAL, newBound, null);
             lowerBoundPerturbationConstraint = model.addConstr(expr, GRB.LESS_EQUAL, newBound + BuildingType.getPrecision() - 0.0001, null);

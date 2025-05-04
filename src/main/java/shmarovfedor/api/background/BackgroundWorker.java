@@ -27,12 +27,16 @@ public class BackgroundWorker extends SwingWorker<Void, Void> {
     @Override
     protected Void doInBackground() throws Exception {
         problem.optimizer().setModel();
+        SolutionManager.resetPass();
         if (problem.config().valueOf(BINARY_SEARCH)) {
             problem.optimizer().optimize();
             double lowerBound = SolutionManager.getLowerBound();
             double upperBound = SolutionManager.getObjectiveUpperBound();
             problem.optimizer().dispose();
+            var obj = SolutionManager.getObjective();
+            if (obj > lowerBound) lowerBound = obj;
             while ((upperBound - lowerBound) >= BuildingType.getPrecision()) {
+                SolutionManager.incrementPass();
                 double bound = (upperBound + lowerBound) / 2;
                 SolutionManager.setLowerBound(lowerBound);
                 SolutionManager.setUpperBound(upperBound);
@@ -41,9 +45,15 @@ public class BackgroundWorker extends SwingWorker<Void, Void> {
                 problem.optimizer().setModel();
                 problem.optimizer().setLowerBound(bound);
                 problem.optimizer().optimize();
-                if (problem.optimizer().isCorrectTermination()) lowerBound = bound;
-                else upperBound = bound;
+                if (problem.optimizer().isCorrectTermination()) {
+                    System.out.println("Improving solution");
+                    lowerBound = bound;
+                } else {
+                    System.out.println("Failed to find solution, lowering bound");
+                    upperBound = bound;
+                }
                 if (problem.optimizer().isExecutionTermination()) {
+                    System.out.println("Terminated, closing");
                     problem.optimizer().terminateExecution();
                     problem.optimizer().dispose();
                     break;

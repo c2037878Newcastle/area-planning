@@ -5,7 +5,6 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 import shmarovfedor.api.model.SolutionManager;
-import shmarovfedor.api.problem.Problem;
 
 public class ProgressPanel extends JPanel{
 	
@@ -46,6 +45,7 @@ public class ProgressPanel extends JPanel{
 		drawCurrentBound(g);
 		drawUpperBound(g);
 		drawSolutionAmount(g);
+		drawPassAmount(g);
 		drawStatus(g);
 		base.paintProgressPanel(g);
 		repaint();
@@ -75,6 +75,11 @@ public class ProgressPanel extends JPanel{
 		g.setColor(Color.BLACK);
 		g.drawString(SolutionManager.getAll().size() + " solutions were found", 10, 100);
 	}
+
+	public void drawPassAmount(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.drawString("Over " + SolutionManager.getPassCount() + " passes.", 10, 120);
+	}
 	
 	public void drawStatus(Graphics g) {
 		g.setColor(Color.BLACK);
@@ -86,7 +91,7 @@ public class ProgressPanel extends JPanel{
 
 		var color = g.getColor();
 		g.setColor(status.color());
-		g.drawString("Status: " + status.displayName(), 10, 120);
+		g.drawString("Status: " + status.displayName(), 10, 140);
 		g.setColor(color);
 	}
 	

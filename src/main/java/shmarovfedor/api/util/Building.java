@@ -7,7 +7,7 @@ public class Building {
 
     private int globalIndex;
 
-    private GRBVar excluded;
+    private GRBVar included;
     private GRBVar x;
     private GRBVar y;
 
@@ -26,8 +26,8 @@ public class Building {
         return globalIndex;
     }
 
-    public void setExcludedVariable(GRBVar enabledVar) {
-        this.excluded = enabledVar;
+    public void setIncludedVariable(GRBVar enabledVar) {
+        this.included = enabledVar;
     }
 
     public void setXVar(GRBVar x) {
@@ -38,8 +38,8 @@ public class Building {
         this.y = y;
     }
 
-    public GRBVar excluded() {
-        return excluded;
+    public GRBVar included() {
+        return included;
     }
 
     public double benefit() {

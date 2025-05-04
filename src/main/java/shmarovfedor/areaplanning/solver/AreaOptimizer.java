@@ -85,7 +85,7 @@ public class AreaOptimizer extends Optimizer {
                     .flatMap(Collection::stream)
                     .forEach(building -> {
                                 building.setGlobalIndex(atK.getAndIncrement());
-                                building.setExcludedVariable(included[building.globalIndex()]);
+                                building.setIncludedVariable(included[building.globalIndex()]);
                             }
                     );
 
@@ -96,7 +96,7 @@ public class AreaOptimizer extends Optimizer {
                     .stream()
                     .flatMap(Collection::stream)
                     .forEach(building ->
-                            objective.addTerm(building.benefit(), building.excluded())
+                            objective.addTerm(building.benefit(), building.included())
                     );
             model.setObjective(objective, MAXIMIZE);
 
