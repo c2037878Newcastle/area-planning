@@ -14,7 +14,7 @@ import static java.util.Optional.of;
 
 public class SettingStorage {
 
-    private JsonObject data;
+    private final JsonObject data;
 
     public SettingStorage(JsonObject src) {
         this.data = src.deepCopy();

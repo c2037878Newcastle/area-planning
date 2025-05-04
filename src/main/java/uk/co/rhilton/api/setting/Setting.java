@@ -21,6 +21,14 @@ public abstract class Setting<T> {
         this.defaultValue = defaultValue;
     }
 
+    public abstract T parse(JsonElement element);
+
+    public abstract JsonElement save(T value);
+
+    public abstract Component settingField(T currentValue);
+
+    public abstract T fromField(Component c) throws IllegalArgumentException;
+
     public String id() {
         return id;
     }
@@ -32,15 +40,6 @@ public abstract class Setting<T> {
     public Supplier<T> supplyDefault() {
         return defaultValue;
     }
-
-
-    public abstract T parse(JsonElement element);
-
-    public abstract JsonElement save(T value);
-
-    public abstract Component settingField(T currentValue);
-
-    public abstract T fromField(Component c) throws IllegalArgumentException;
 
     public static Setting<String> String(String id, Supplier<String> defaultValue) {
         return new Setting<>(String.class, id, defaultValue) {

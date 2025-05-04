@@ -25,7 +25,6 @@ public class SettingGUI {
 
     public void fillAndOpen() {
         var frame = new JFrame("Change Settings") {{
-//            setSize(new Dimension(200, 200));
             setLocationRelativeTo(problem.frame());
             setResizable(false);
             setLayout(new GridLayout(entries.size() + 1, 2));

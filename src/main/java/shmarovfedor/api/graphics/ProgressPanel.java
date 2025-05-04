@@ -53,22 +53,22 @@ public class ProgressPanel extends JPanel{
 	
 	public void drawLowerBound(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.drawString("Lower bound: " + SolutionManager.getLowerBound(), 10, 40);
+		g.drawString("Lower bound: £" + SolutionManager.getLowerBound(), 10, 40);
 	}
 	
 	public void drawCurrentBound(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.drawString("Current bound: " + SolutionManager.getCurrentBound(), 10, 60);
+		g.drawString("Current bound: £" + SolutionManager.getCurrentBound(), 10, 60);
 	}
 	
 	public void drawUpperBound(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.drawString("Upper bound: " + SolutionManager.getUpperBound(), 10, 80);
+		g.drawString("Upper bound: £" + SolutionManager.getUpperBound(), 10, 80);
 	}
 	
 	public void drawBenefit(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.drawString("Benefit: " + SolutionManager.getObjective(), 10, 20);
+		g.drawString("Benefit: £" + SolutionManager.getObjective(), 10, 20);
 	}
 	
 	public void drawSolutionAmount(Graphics g) {
@@ -80,13 +80,14 @@ public class ProgressPanel extends JPanel{
 		g.setColor(Color.BLACK);
 		
 		
-		String status = base.problem
+		var status = base.problem
 				.optimizer()
-				.getStatus()
-				.name();
-		
-		g.drawString("Status: " + status, 10, 120);
+				.getStatus();
 
+		var color = g.getColor();
+		g.setColor(status.color());
+		g.drawString("Status: " + status.displayName(), 10, 120);
+		g.setColor(color);
 	}
 	
 }
