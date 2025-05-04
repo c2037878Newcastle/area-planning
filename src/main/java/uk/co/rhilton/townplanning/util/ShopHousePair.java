@@ -6,7 +6,7 @@ import shmarovfedor.api.util.BuildingPair;
 
 public class ShopHousePair extends BuildingPair {
     private int index;
-    private GRBVar included;
+    private GRBVar excluded;
 
     public ShopHousePair(Building shop, Building house) {
         super(shop, house);
@@ -22,13 +22,13 @@ public class ShopHousePair extends BuildingPair {
         return index;
     }
 
-    public ShopHousePair included(GRBVar included) {
-        this.included = included;
+    public ShopHousePair excluded(GRBVar included) {
+        this.excluded = included;
         return this;
     }
 
-    public GRBVar included() {
-        return included;
+    public GRBVar excluded() {
+        return excluded;
     }
 
     public Building shop() {

@@ -2,14 +2,12 @@ package shmarovfedor.api.util;
 
 import com.gurobi.gurobi.GRBVar;
 
-import java.util.Objects;
-
 public class Building {
     private final BuildingType type;
 
     private int globalIndex;
 
-    private GRBVar included;
+    private GRBVar excluded;
     private GRBVar x;
     private GRBVar y;
 
@@ -28,8 +26,8 @@ public class Building {
         return globalIndex;
     }
 
-    public void setIncludedVariable(GRBVar enabledVar) {
-        this.included = enabledVar;
+    public void setExcludedVariable(GRBVar enabledVar) {
+        this.excluded = enabledVar;
     }
 
     public void setXVar(GRBVar x) {
@@ -40,8 +38,8 @@ public class Building {
         this.y = y;
     }
 
-    public GRBVar included() {
-        return included;
+    public GRBVar excluded() {
+        return excluded;
     }
 
     public double benefit() {

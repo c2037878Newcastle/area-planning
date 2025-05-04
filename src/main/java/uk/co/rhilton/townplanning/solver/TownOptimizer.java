@@ -96,7 +96,7 @@ public class TownOptimizer extends Optimizer {
                     .flatMap(Collection::stream)
                     .forEach(building -> {
                                 building.setGlobalIndex(atK.getAndIncrement());
-                                building.setIncludedVariable(included[building.globalIndex()]);
+                                building.setExcludedVariable(included[building.globalIndex()]);
                             }
                     );
 
@@ -107,28 +107,28 @@ public class TownOptimizer extends Optimizer {
                     .stream()
                     .flatMap(Collection::stream)
                     .forEach(building ->
-                            objective.addTerm(building.benefit(), building.included())
+                            objective.addTerm(building.benefit(), building.excluded())
                     );
             model.setObjective(objective, MAXIMIZE);
 
-			/*
-			Breaking Symmetry - reduces search time by eliminating symmetric parts of a search space e.g. 011, 101 110
-			 */
-            buildings
-                    .keySet()
-                    .stream()
-                    .map(type -> {
-                        var list = buildings.get(type);
-                        var pairs = new ArrayList<BuildingPair>();
-                        for (var i = 0; i < list.size() - 1; i++) {
-                            var first = list.get(i);
-                            var second = list.get(i + 1);
-                            pairs.add(new BuildingPair(first, second));
-                        }
-                        return pairs;
-                    })
-                    .flatMap(Collection::stream)
-                    .forEach(this::breakSymmetry);
+//			/*
+//			Breaking Symmetry - reduces search time by eliminating symmetric parts of a search space e.g. 011, 101 110
+//			 */
+//            buildings
+//                    .keySet()
+//                    .stream()
+//                    .map(type -> {
+//                        var list = buildings.get(type);
+//                        var pairs = new ArrayList<BuildingPair>();
+//                        for (var i = 0; i < list.size() - 1; i++) {
+//                            var first = list.get(i);
+//                            var second = list.get(i + 1);
+//                            pairs.add(new BuildingPair(first, second));
+//                        }
+//                        return pairs;
+//                    })
+//                    .flatMap(Collection::stream)
+//                    .forEach(this::breakSymmetry);
 
             var x = model.addVars(totalMax, CONTINUOUS);
             var y = model.addVars(totalMax, CONTINUOUS);
@@ -236,7 +236,7 @@ public class TownOptimizer extends Optimizer {
 
             shopHousePairs.forEach(pair -> {
                 pair.index(atomicCount.getAndIncrement());
-                pair.included(shEnabled[pair.index()]);
+                pair.excluded(shEnabled[pair.index()]);
             });
 
 
@@ -251,7 +251,7 @@ public class TownOptimizer extends Optimizer {
                     var shopIncludes =
                             shopHousePairs.stream()
                                     .filter(pair -> pair.shop().equals(shop))
-                                    .map(ShopHousePair::included)
+                                    .map(ShopHousePair::excluded)
                                     .collect(Collectors.toSet());
 
                     // ensure shop has at least one building
@@ -265,7 +265,7 @@ public class TownOptimizer extends Optimizer {
 
                     var includeCheck = new GRBLinExpr();
                     includeCheck.addTerm(1, z);
-                    includeCheck.addTerm(1, shop.included());
+                    includeCheck.addTerm(1, shop.excluded());
                     model.addConstr(includeCheck, LESS_EQUAL, 1, null);
                 } catch (GRBException e) {
                     throw new RuntimeException(e);
@@ -277,7 +277,7 @@ public class TownOptimizer extends Optimizer {
                     var houseIncludes =
                             shopHousePairs.stream()
                                     .filter(pair -> pair.house().equals(house))
-                                    .map(ShopHousePair::included)
+                                    .map(ShopHousePair::excluded)
                                     .collect(Collectors.toSet());
 
                     var z = model.addVars(1, BINARY)[0];
@@ -291,7 +291,7 @@ public class TownOptimizer extends Optimizer {
 
                     var includeCheck = new GRBLinExpr();
                     includeCheck.addTerm(1, z);
-                    includeCheck.addTerm(1, house.included());
+                    includeCheck.addTerm(1, house.excluded());
                     model.addConstr(includeCheck, LESS_EQUAL, 1, null);
 
                 } catch (GRBException e) {
@@ -301,12 +301,12 @@ public class TownOptimizer extends Optimizer {
 
             // at least one shop in solution
             var shopExpr = new GRBLinExpr();
-            shops.forEach(shop -> shopExpr.addTerm(1, shop.included()));
+            shops.forEach(shop -> shopExpr.addTerm(1, shop.excluded()));
             model.addConstr(shopExpr, GREATER_EQUAL, 1, null);
 
             // at least one house in solution
             var houseExpr = new GRBLinExpr();
-            houses.forEach(house -> houseExpr.addTerm(1, house.included()));
+            houses.forEach(house -> houseExpr.addTerm(1, house.excluded()));
             model.addConstr(houseExpr, GREATER_EQUAL, 1, null);
 
             shops.forEach(shop -> {
@@ -314,7 +314,7 @@ public class TownOptimizer extends Optimizer {
                     var shopIncludes =
                             shopHousePairs.stream()
                                     .filter(pair -> pair.shop().equals(shop))
-                                    .map(ShopHousePair::included)
+                                    .map(ShopHousePair::excluded)
                                     .collect(Collectors.toSet());
 
                     var z = model.addVars(1, BINARY)[0];
@@ -327,7 +327,7 @@ public class TownOptimizer extends Optimizer {
 
                     var includeCheck = new GRBLinExpr();
                     expr.addTerm(1, z);
-                    expr.addTerm(1, shop.included());
+                    expr.addTerm(1, shop.excluded());
                     model.addConstr(includeCheck, LESS_EQUAL, 1, null);
                 } catch (GRBException e) {
                     throw new RuntimeException(e);
@@ -339,7 +339,7 @@ public class TownOptimizer extends Optimizer {
                     var houseIncludes =
                             shopHousePairs.stream()
                                     .filter(pair -> pair.house().equals(house))
-                                    .map(ShopHousePair::included)
+                                    .map(ShopHousePair::excluded)
                                     .collect(Collectors.toSet());
 
                     var z = model.addVars(1, BINARY)[0];
@@ -352,7 +352,7 @@ public class TownOptimizer extends Optimizer {
 
                     var includeCheck = new GRBLinExpr();
                     expr.addTerm(1, z);
-                    expr.addTerm(1, house.included());
+                    expr.addTerm(1, house.excluded());
                     model.addConstr(includeCheck, LESS_EQUAL, 1, null);
 
                 } catch (GRBException e) {
@@ -379,16 +379,12 @@ public class TownOptimizer extends Optimizer {
             var shop = pair.shop();
             var house = pair.house();
 
-//
-//            var z = model.addVars(1, BINARY)[0];
-//            model.update();
-
             var expr = new GRBLinExpr();
             expr.addTerm(1.0, shop.xVar());
             expr.addTerm(-1.0, house.xVar());
             expr.addTerm(1.0, shop.yVar());
             expr.addTerm(-1.0, house.yVar());
-            expr.addTerm(-bigM, pair.included());
+            expr.addTerm(-bigM, pair.excluded());
             model.addConstr(expr, LESS_EQUAL, distance, null);
 
             expr = new GRBLinExpr();
@@ -396,7 +392,7 @@ public class TownOptimizer extends Optimizer {
             expr.addTerm(1.0, house.xVar());
             expr.addTerm(1.0, shop.yVar());
             expr.addTerm(-1.0, house.yVar());
-            expr.addTerm(-bigM, pair.included());
+            expr.addTerm(-bigM, pair.excluded());
             model.addConstr(expr, LESS_EQUAL, distance, null);
 
             expr = new GRBLinExpr();
@@ -404,7 +400,7 @@ public class TownOptimizer extends Optimizer {
             expr.addTerm(-1.0, house.xVar());
             expr.addTerm(-1.0, shop.yVar());
             expr.addTerm(1.0, house.yVar());
-            expr.addTerm(-bigM, pair.included());
+            expr.addTerm(-bigM, pair.excluded());
             model.addConstr(expr, LESS_EQUAL, distance, null);
 
             expr = new GRBLinExpr();
@@ -412,14 +408,14 @@ public class TownOptimizer extends Optimizer {
             expr.addTerm(1.0, house.xVar());
             expr.addTerm(-1.0, shop.yVar());
             expr.addTerm(1.0, house.yVar());
-            expr.addTerm(-bigM, pair.included());
+            expr.addTerm(-bigM, pair.excluded());
             model.addConstr(expr, LESS_EQUAL, distance, null);
 
             expr = new GRBLinExpr();
-            expr.addTerm(1, shop.included());
-            expr.addTerm(1, house.included());
-            expr.addTerm(1, pair.included());
-            model.addConstr(expr, LESS_EQUAL, 2, null);
+            expr.addTerm(1, house.excluded());
+            expr.addTerm(1, shop.excluded());
+            expr.addTerm(-bigM, pair.excluded());
+            model.addConstr(expr, LESS_EQUAL, 0, null);
         } catch (GRBException e) {
             throw new RuntimeException(e);
         }
