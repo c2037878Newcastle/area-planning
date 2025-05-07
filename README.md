@@ -1,9 +1,14 @@
-# Area Planning
+# Area Planning Framework
 
-This project aims to maximise the construction profit for a predefined region by 
-formulating the optimisation problem as a [mixed-integer linear programming](https://en.wikipedia.org/wiki/Linear_programming#Integer_unknowns)
+This project is a framework for area related problems, with API to create your own problem by formulating the optimisation problem as a [mixed-integer linear programming](https://en.wikipedia.org/wiki/Linear_programming#Integer_unknowns)
 (MILP) problem and solving it using [Gurobi Optimizer](https://www.gurobi.com/).
-See my [MSc dissertation](https://shmarov.com/files/fedor-shmarov-msc-dissertation.pdf) for more information.
+
+Provided by default are region based inclusion and exclusion, and distance-related constraints.
+
+
+Current implementations include:
+* Area Planning by Fedor Shmarov ([MSc dissertation](https://shmarov.com/files/fedor-shmarov-msc-dissertation.pdf))
+* Town Planning by Ryan Hilton
 
 ## Quick Start
 1. To get started first obtain a license for the [Gurobi Optimiser](https://www.gurobi.com/)
