@@ -49,7 +49,20 @@ public class SolutionManager {
 	 * @return true, if successful
 	 */
 	public static boolean add(List<SolutionBuilding> solution) {
+		var shops = solution.stream().filter(b -> b.type() instanceof ShopBuilding).toList();
+		var house = solution.stream().filter(b -> b.type() instanceof HouseBuilding).toList();
+
+		house
+				.stream()
+				.flatMapToDouble(h -> shops.stream().mapToDouble(s -> manhattan(h, s)).min().stream())
+				.max()
+				.ifPresent(max -> System.out.println("\n\nSolution Max Distance: " + max + "\n\n"));
+
 		return solutions.add(solution);
+	}
+
+	private static double manhattan(SolutionBuilding one, SolutionBuilding two) {
+		return abs(one.x() - two.x()) + abs(one.y() - two.y());
 	}
 
 	/**

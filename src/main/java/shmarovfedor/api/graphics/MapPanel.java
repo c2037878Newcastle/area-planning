@@ -43,7 +43,7 @@ public class MapPanel extends JPanel {
     /**
      * The Constant NET_GAP.
      */
-    private static final int NET_STEP = 10;
+    private static final int NET_STEP = 20;
 
     /**
      * The Constant BORDER_COLOR.
@@ -137,7 +137,7 @@ public class MapPanel extends JPanel {
         this.bottomBound = height - BORDER_GAP;
 
         if (RegionManager.getPoints().size() != 0) calculateScale();
-        else scale = 2.5;
+        else scale = 1.25;
 
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(width, height));
