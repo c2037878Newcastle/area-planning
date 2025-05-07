@@ -8,8 +8,6 @@ import javax.swing.*;
 
 import static uk.co.rhilton.api.setting.DefaultSettings.BINARY_SEARCH;
 
-// TODO: Auto-generated Javadoc
-
 /**
  * The Class BackgroundWorker.
  */

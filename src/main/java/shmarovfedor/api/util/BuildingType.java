@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 import static java.lang.Math.floor;
 
-// TODO: Auto-generated Javadoc
 
 /**
  * The Class Building.
@@ -21,7 +20,6 @@ public abstract class BuildingType {
      *
      * @return the color
      */
-    // TODO move utils
     public static Color generateRandomColor() {
         Random random = new Random();
         return new Color(random.nextFloat(), random.nextFloat(), random.nextFloat());

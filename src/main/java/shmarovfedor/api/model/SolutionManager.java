@@ -14,7 +14,6 @@ import static java.lang.Math.abs;
 import static uk.co.rhilton.townplanning.building.HouseBuilding.HOUSE_ID;
 import static uk.co.rhilton.townplanning.building.ShopBuilding.SHOP_ID;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SolutionManager.
  */

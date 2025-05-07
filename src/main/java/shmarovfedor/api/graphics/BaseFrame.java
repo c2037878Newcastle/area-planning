@@ -100,9 +100,9 @@ public abstract class BaseFrame extends JFrame {
             dialog.showOpenDialog(this);
             if (dialog.getSelectedFile() == null) return;
             var file = Path.of(dialog.getSelectedFile().toURI());
-            if (!Files.isRegularFile(file)) return; // TODO error
+            if (!Files.isRegularFile(file)) return;
             var config = SettingStorage.fromFile(file);
-            if (config.isEmpty()) return; // TODO error
+            if (config.isEmpty()) return;
             problem.loadConfig(config.get());
         });
         fileMenu.add(open);
@@ -117,8 +117,8 @@ public abstract class BaseFrame extends JFrame {
             dialog.showSaveDialog(this);
             if (dialog.getSelectedFile() == null) return;
             var file = Path.of(dialog.getSelectedFile().toURI());
-            if (Files.isDirectory(file)) return; // TODO error
-            problem.saveConfig(file); // TODO success/error msg
+            if (Files.isDirectory(file)) return;
+            problem.saveConfig(file);
         });
         fileMenu.add(save);
 

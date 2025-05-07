@@ -146,7 +146,7 @@ public class AreaOptimizer extends Optimizer {
                             .toList()
                     )
                     .flatMap(Collection::stream)
-                    .toList(); // TODO remove duplicates
+                    .toList();
 
             var bigM = calculateMaxDistance(polyX, polyY, types);
             var toggles = model.addVars(4 * allPairs.size(), BINARY);

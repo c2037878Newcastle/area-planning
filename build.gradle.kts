@@ -30,5 +30,4 @@ dependencies {
 
 application {
     mainClass = "shmarovfedor.RunGUI"
-    applicationDefaultJvmArgs = listOf("-Xmx15G", "-Xms10G")
 }

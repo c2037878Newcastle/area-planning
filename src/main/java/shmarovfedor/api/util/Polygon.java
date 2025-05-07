@@ -2,7 +2,6 @@ package shmarovfedor.api.util;
 
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Polygon.
  */

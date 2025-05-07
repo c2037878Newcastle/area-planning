@@ -1,6 +1,5 @@
 package shmarovfedor.api.util;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Point.
  */

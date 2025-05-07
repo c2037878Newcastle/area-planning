@@ -138,7 +138,7 @@ public class TownOptimizer extends Optimizer {
                             .toList()
                     )
                     .flatMap(Collection::stream)
-                    .toList(); // TODO remove duplicates
+                    .toList();
 
             var bigM = calculateMaxDistance(polyX, polyY, types);
             var toggles = model.addVars(4 * allPairs.size(), BINARY);
@@ -237,83 +237,46 @@ public class TownOptimizer extends Optimizer {
             houses.forEach(house -> houseExpr.addTerm(1, house.included()));
             model.addConstr(houseExpr, GREATER_EQUAL, 1, null);
 
-            var shZ = model.addVars(2 * shopHousePairs.size(), BINARY);
-            var counterSHZ = new AtomicInteger(0);
-            shopHousePairs.forEach(pair -> {
-                try {
-                    var aZ = shZ[counterSHZ.getAndIncrement()];
-                    var bZ = shZ[counterSHZ.getAndIncrement()];
-
-                    var expr = new GRBLinExpr();
-                    expr.addTerm(1, pair.shop().included());
-                    expr.addTerm(1, pair.house().included());
-                    expr.addTerm(bigM, aZ);
-
-                    model.addConstr(expr, GREATER_EQUAL, 2, null);
-
-                    expr = new GRBLinExpr();
-                    expr.addTerm(1, pair.excluded());
-                    expr.addTerm(bigM, bZ);
-                    model.addConstr(expr, GREATER_EQUAL, 1, null);
-
-                    expr = new GRBLinExpr();
-                    expr.addTerm(1, aZ);
-                    expr.addTerm(1, bZ);
-                    model.addConstr(expr, GREATER_EQUAL, 1, null);
-                } catch (GRBException e) {
-                    throw new RuntimeException(e);
-                }
-
-            });
-
             var zCount = new AtomicInteger(0);
-            var shopsZ = model.addVars(shops.size(), BINARY);
+            var houseZ = model.addVars(houses.size(), BINARY);
             model.update();
-            shops.forEach(shop -> {
+            houses.forEach(house -> {
                 try {
-                    var shopExcludes =
+                    var pairs =
                             shopHousePairs.stream()
-                                    .filter(pair -> pair.shop().equals(shop))
-                                    .map(ShopHousePair::excluded)
+                                    .filter(pair -> pair.house().equals(house))
                                     .collect(Collectors.toSet());
 
-
-                    var z = shopsZ[zCount.getAndIncrement()];
+                    var z = houseZ[zCount.getAndIncrement()];
+                    model.update();
+                    model.addGenConstrAnd(z, pairs.stream().map(ShopHousePair::excluded).toArray(GRBVar[]::new), null);
                     var expr = new GRBLinExpr();
-                    expr.addTerm(-bigM, z);
-                    shopExcludes.forEach(val -> expr.addTerm(1, val));
-                    model.addConstr(expr, LESS_EQUAL, shopExcludes.size() - 1, null);
-
-                    var includeCheck = new GRBLinExpr();
                     expr.addTerm(1, z);
-                    expr.addTerm(1, shop.included());
-                    model.addConstr(includeCheck, LESS_EQUAL, 1, null);
+                    expr.addTerm(1, house.included());
+                    model.addConstr(expr, EQUAL, 1, null);
+
                 } catch (GRBException e) {
                     throw new RuntimeException(e);
                 }
             });
 
             zCount.set(0);
-            var houseZ = model.addVars(houses.size(), BINARY);
+            var shopZ = model.addVars(shops.size(), BINARY);
             model.update();
-            houses.forEach(house -> {
+            shops.forEach(shop -> {
                 try {
-                    var houseExcludes =
+                    var pairs =
                             shopHousePairs.stream()
-                                    .filter(pair -> pair.house().equals(house))
-                                    .map(ShopHousePair::excluded)
+                                    .filter(pair -> pair.shop().equals(shop))
                                     .collect(Collectors.toSet());
 
-                    var z = houseZ[zCount.getAndIncrement()];
+                    var z = shopZ[zCount.getAndIncrement()];
+                    model.update();
+                    model.addGenConstrAnd(z, pairs.stream().map(ShopHousePair::excluded).toArray(GRBVar[]::new), null);
                     var expr = new GRBLinExpr();
-                    expr.addTerm(-bigM, z);
-                    houseExcludes.forEach(val -> expr.addTerm(1, val));
-                    model.addConstr(expr, LESS_EQUAL, houseExcludes.size() - 1, null);
-
-                    var includeCheck = new GRBLinExpr();
                     expr.addTerm(1, z);
-                    expr.addTerm(1, house.included());
-                    model.addConstr(includeCheck, LESS_EQUAL, 1, null);
+                    expr.addTerm(1, shop.included());
+                    model.addConstr(expr, EQUAL, 1, null);
 
                 } catch (GRBException e) {
                     throw new RuntimeException(e);
@@ -371,16 +334,14 @@ public class TownOptimizer extends Optimizer {
             expr.addTerm(-bigM, pair.excluded());
             model.addConstr(expr, LESS_EQUAL, distance, null);
 
+            // can only exist as a valid solution if both house and shop are in solution
             expr = new GRBLinExpr();
             expr.addTerm(1, house.included());
             expr.addTerm(1, shop.included());
             expr.addTerm(bigM, pair.excluded());
             model.addConstr(expr, GREATER_EQUAL, 2, null);
 
-//            expr.addTerm(-1, house.included());
-//            expr.addTerm(-1, shop.included());
-//            expr.addTerm(-bigM, pair.excluded());
-//            model.addConstr(expr, LESS_EQUAL, 0, null);
+
         } catch (GRBException e) {
             throw new RuntimeException(e);
         }

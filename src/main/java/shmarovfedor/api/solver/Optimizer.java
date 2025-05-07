@@ -183,7 +183,7 @@ public abstract class Optimizer {
         double[] c = excluded.getC();
 
         double M3 = Double.MAX_VALUE;
-        var M2 = 1000; // TODO magic
+        var M2 = 1000;
 
         double maxD = -Double.MAX_VALUE;
         if (-c[vertex] + a[vertex] * building.width() / 2 + b[vertex] * building.height() / 2 > maxD)
